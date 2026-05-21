@@ -2,13 +2,8 @@ module github.com/mridang/wilhelm/assert/traefik/io
 
 go 1.26.2
 
-// >>> wilhelm:dev-only (stripped by hack/release.sh) >>>
-//nolint:gomoddirectives // local replace, stripped at release
-replace github.com/mridang/wilhelm => ../../..
-// <<< wilhelm:dev-only <<<
-
 require (
-	github.com/mridang/wilhelm v0.0.0-dry
+	github.com/mridang/wilhelm v1.0.0
 	github.com/traefik/traefik/v3 v3.2.0
 )
 

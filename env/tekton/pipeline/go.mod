@@ -2,17 +2,9 @@ module github.com/mridang/wilhelm/env/tekton/pipeline
 
 go 1.26.2
 
-// >>> wilhelm:dev-only (stripped by hack/release.sh) >>>
-//nolint:gomoddirectives // local replace, stripped at release
-replace github.com/mridang/wilhelm => ../../..
-
-//nolint:gomoddirectives // local replace, stripped at release
-replace github.com/mridang/wilhelm/assert/tekton/pipeline => ../../../assert/tekton/pipeline
-// <<< wilhelm:dev-only <<<
-
 require (
-	github.com/mridang/wilhelm v0.0.0-dry
-	github.com/mridang/wilhelm/assert/tekton/pipeline v0.0.0-dry
+	github.com/mridang/wilhelm v1.0.0
+	github.com/mridang/wilhelm/assert/tekton/pipeline v1.0.0
 	github.com/stretchr/testify v1.11.1
 	github.com/tektoncd/pipeline v1.12.0
 	k8s.io/apimachinery v0.36.1

@@ -2,16 +2,11 @@ module github.com/mridang/wilhelm/assert/flux/helm
 
 go 1.26.2
 
-// >>> wilhelm:dev-only (stripped by hack/release.sh) >>>
-//nolint:gomoddirectives // local replace, stripped at release
-replace github.com/mridang/wilhelm => ../../..
-// <<< wilhelm:dev-only <<<
-
 require (
 	github.com/fluxcd/helm-controller/api v1.5.5
 	github.com/fluxcd/pkg/apis/kustomize v1.15.1
 	github.com/fluxcd/pkg/apis/meta v1.25.1
-	github.com/mridang/wilhelm v0.0.0-dry
+	github.com/mridang/wilhelm v1.0.0
 	k8s.io/apiextensions-apiserver v0.35.2
 	k8s.io/apimachinery v0.35.2
 )

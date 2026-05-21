@@ -2,18 +2,10 @@ module github.com/mridang/wilhelm/env/flux/source
 
 go 1.26.2
 
-// >>> wilhelm:dev-only (stripped by hack/release.sh) >>>
-//nolint:gomoddirectives // local replace, stripped at release
-replace github.com/mridang/wilhelm => ../../..
-
-//nolint:gomoddirectives // local replace, stripped at release
-replace github.com/mridang/wilhelm/assert/flux/source => ../../../assert/flux/source
-// <<< wilhelm:dev-only <<<
-
 require (
 	github.com/fluxcd/source-controller/api v1.8.5
-	github.com/mridang/wilhelm v0.0.0-dry
-	github.com/mridang/wilhelm/assert/flux/source v0.0.0-dry
+	github.com/mridang/wilhelm v1.0.0
+	github.com/mridang/wilhelm/assert/flux/source v1.0.0
 	github.com/stretchr/testify v1.11.1
 	k8s.io/apimachinery v0.36.1
 )

@@ -2,18 +2,10 @@ module github.com/mridang/wilhelm/env/cert/manager
 
 go 1.26.2
 
-// >>> wilhelm:dev-only (stripped by hack/release.sh) >>>
-//nolint:gomoddirectives // local replace, stripped at release
-replace github.com/mridang/wilhelm => ../../..
-
-//nolint:gomoddirectives // local replace, stripped at release
-replace github.com/mridang/wilhelm/assert/cert/manager => ../../../assert/cert/manager
-// <<< wilhelm:dev-only <<<
-
 require (
 	github.com/cert-manager/cert-manager v1.20.2
-	github.com/mridang/wilhelm v0.0.0-dry
-	github.com/mridang/wilhelm/assert/cert/manager v0.0.0-dry
+	github.com/mridang/wilhelm v1.0.0
+	github.com/mridang/wilhelm/assert/cert/manager v1.0.0
 	github.com/stretchr/testify v1.11.1
 	k8s.io/apimachinery v0.36.1
 )

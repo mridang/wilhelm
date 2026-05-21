@@ -2,17 +2,9 @@ module github.com/mridang/wilhelm/env/velero/api
 
 go 1.26.2
 
-// >>> wilhelm:dev-only (stripped by hack/release.sh) >>>
-//nolint:gomoddirectives // local replace, stripped at release
-replace github.com/mridang/wilhelm => ../../..
-
-//nolint:gomoddirectives // local replace, stripped at release
-replace github.com/mridang/wilhelm/assert/velero/api => ../../../assert/velero/api
-// <<< wilhelm:dev-only <<<
-
 require (
-	github.com/mridang/wilhelm v0.0.0-dry
-	github.com/mridang/wilhelm/assert/velero/api v0.0.0-dry
+	github.com/mridang/wilhelm v1.0.0
+	github.com/mridang/wilhelm/assert/velero/api v1.0.0
 	github.com/stretchr/testify v1.11.1
 	github.com/vmware-tanzu/velero v1.18.1
 	k8s.io/apimachinery v0.36.1
