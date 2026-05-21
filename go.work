@@ -1,0 +1,23 @@
+go 1.26.2
+
+// go.work lets all wilhelm modules share a single dev-time build context
+// so go:generate directives in CRD subpackages can run the generators
+// from the root module via their full import path. End users importing a
+// submodule do not need this file; it is only used during development.
+use (
+	.
+	./assert/cert/manager
+	./assert/flux/helm
+	./assert/flux/kustomize
+	./assert/flux/source
+	./assert/tekton/pipeline
+	./assert/traefik/io
+	./assert/velero/api
+	./env/cert/manager
+	./env/flux/helm
+	./env/flux/kustomize
+	./env/flux/source
+	./env/tekton/pipeline
+	./env/traefik/io
+	./env/velero/api
+)

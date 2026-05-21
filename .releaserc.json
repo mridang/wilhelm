@@ -1,0 +1,33 @@
+{
+  "branches": [
+    "master",
+    "main"
+  ],
+  "plugins": [
+    "@semantic-release/commit-analyzer",
+    "@semantic-release/release-notes-generator",
+    [
+      "@semantic-release/exec",
+      {
+        "prepareCmd": "bash hack/release.sh --prepare ${nextRelease.version}",
+        "publishCmd": "bash hack/release.sh --tag ${nextRelease.version}"
+      }
+    ],
+    [
+      "@semantic-release/git",
+      {
+        "assets": [
+          "go.mod",
+          "go.sum",
+          "go.work",
+          "assert/**/go.mod",
+          "assert/**/go.sum",
+          "env/**/go.mod",
+          "env/**/go.sum"
+        ],
+        "message": "chore(release): ${nextRelease.version} [skip ci]\n\n${nextRelease.notes}"
+      }
+    ],
+    "@semantic-release/github"
+  ]
+}

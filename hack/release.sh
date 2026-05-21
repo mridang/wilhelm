@@ -1,0 +1,111 @@
+#!/usr/bin/env bash
+# release.sh: prepare every wilhelm module for a tagged release.
+#
+# semantic-release invokes this from .releaserc.json's @semantic-release/exec
+# in two separate lifecycle steps:
+#
+#   --prepare <version>  (prepareCmd)
+#     1. Removes local `replace github.com/mridang/wilhelm ... => ...` lines.
+#     2. Sets every `require github.com/mridang/wilhelm[...]` line to the
+#        release version.
+#
+#   --tag <version>  (publishCmd)
+#     Tags every submodule on the current commit.  This step is intentionally
+#     deferred to publishCmd so the tags point at the release commit that
+#     @semantic-release/git already created in the prepare phase.
+#
+# After `--prepare`, semantic-release commits the modified go.mod files
+# (@semantic-release/git).  After that, `--tag` creates per-module Git tags
+# so Go's module proxy resolves each submodule at its own tag
+# (e.g. assert/flux/helm/v0.1.0).
+set -euo pipefail
+
+MODE=""
+VERSION=""
+
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    --prepare) MODE="prepare"; shift ;;
+    --tag)     MODE="tag"; shift ;;
+    -*)        echo "unknown flag: $1" >&2; exit 1 ;;
+    *)         VERSION="$1"; shift ;;
+  esac
+done
+
+# Default to prepare for backwards compatibility (e.g. `make release-dry`).
+if [[ -z "$MODE" ]]; then
+  MODE="prepare"
+fi
+
+if [[ $# -ne 0 ]] || [[ -z "$VERSION" ]]; then
+  echo "usage: $0 [--prepare|--tag] <version-without-leading-v>" >&2
+  exit 1
+fi
+
+# ROOT is the current working directory — release.sh operates on
+# whichever wilhelm checkout invoked it. This lets `make release-dry`
+# point the script at a temporary copy of the tree.
+ROOT=$(pwd)
+
+# Submodule list — every directory under assert/ or env/ with its own go.mod.
+mapfile -t MODULES < <(find "$ROOT/assert" "$ROOT/env" -name go.mod -print)
+
+strip_replaces() {
+  local f=$1
+  # Drop every line between (and including) the `// >>> wilhelm:dev-only`
+  # and `// <<< wilhelm:dev-only` marker lines, plus the blank line that
+  # immediately follows. The markers are emitted by hack/scaffold-crd.sh.
+  awk '
+    /^\/\/ >>> wilhelm:dev-only/ { in_block = 1; next }
+    /^\/\/ <<< wilhelm:dev-only/ { in_block = 0; eat_blank = 1; next }
+    in_block { next }
+    eat_blank && /^$/ { eat_blank = 0; next }
+    { eat_blank = 0; print }
+  ' "$f" > "$f.new"
+  mv "$f.new" "$f"
+}
+
+pin_requires() {
+  local f=$1
+  # Replace every wilhelm require line's pseudo-version with the release
+  # version. The trailing-token match (`v[0-9][^ ]*`) preserves any
+  # `// indirect` comment that follows the version. Matches both the
+  # parent module and assert subpackages.
+  sed -E -i.bak \
+    "s|(github\.com/mridang/wilhelm[^ ]*) v[0-9][^ ]*|\1 v$VERSION|g" \
+    "$f"
+  rm -f "$f.bak"
+}
+
+do_prepare() {
+  for mod in "${MODULES[@]}"; do
+    echo "==> $mod"
+    strip_replaces "$mod"
+    pin_requires "$mod"
+  done
+  echo "OK: prepared release v$VERSION across ${#MODULES[@]} submodules"
+}
+
+do_tag() {
+  # Tag every module on the current commit. The publishCmd hook is invoked
+  # AFTER semantic-release has already created the release commit and root
+  # tag, so the submodule tags correctly point at the release SHA.
+  # Skipped when invoked outside a git checkout (e.g. `make release-dry`).
+  if git -C "$ROOT" rev-parse --git-dir >/dev/null 2>&1; then
+    echo "==> tagging modules at v$VERSION"
+    git -C "$ROOT" tag "v$VERSION"
+    for mod in "${MODULES[@]}"; do
+      rel=${mod#"$ROOT/"}
+      prefix=$(dirname "$rel")
+      git -C "$ROOT" tag "$prefix/v$VERSION"
+    done
+    echo "OK: tagged ${#MODULES[@]} submodules + root at v$VERSION"
+  else
+    echo "==> skipping git tagging ($ROOT is not a git checkout)"
+  fi
+}
+
+case "$MODE" in
+  prepare) do_prepare ;;
+  tag)     do_tag ;;
+esac
