@@ -29,6 +29,9 @@ jobs:
         with:
           go-version-file: "go.mod"
 
+      - name: Install multimod
+        run: go install go.opentelemetry.io/build-tools/multimod@v0.30.0
+
       - name: Run tests
         run: go test ./...
 

@@ -9,8 +9,8 @@
     [
       "@semantic-release/exec",
       {
-        "prepareCmd": "bash hack/release.sh --prepare ${nextRelease.version}",
-        "publishCmd": "bash hack/release.sh --tag ${nextRelease.version}"
+        "prepareCmd": "multimod prerelease -m versions.yaml -v v${nextRelease.version}",
+        "publishCmd": "find assert env -name go.mod | sed 's|/go.mod$||' | while read d; do git tag \"$d/v${nextRelease.version}\" 2>/dev/null || true; done && git push origin --tags"
       }
     ],
     [
@@ -20,6 +20,8 @@
           "go.mod",
           "go.sum",
           "go.work",
+          "go.work.sum",
+          "versions.yaml",
           "assert/**/go.mod",
           "assert/**/go.sum",
           "env/**/go.mod",
