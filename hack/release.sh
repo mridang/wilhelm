@@ -101,3 +101,4 @@ case "$MODE" in
   prepare) do_prepare ;;
   tag)     do_tag ;;
 esac
+
