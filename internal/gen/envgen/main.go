@@ -38,7 +38,7 @@ func (l *crdExtensionList) Set(s string) error {
 		pluralOverride:     map[string]string{},
 		assertNameOverride: map[string]string{},
 	}
-	for _, part := range strings.Split(s, ";") {
+	for part := range strings.SplitSeq(s, ";") {
 		key, val, ok := strings.Cut(part, "=")
 		if !ok {
 			continue
@@ -84,8 +84,9 @@ func main() {
 
 	// Clientset-mode CRD extension: repeatable -crd flag.
 	var crdExtensions crdExtensionList
-	flag.Var(&crdExtensions, "crd",
-		"clientset mode only: repeatable; format: group=X;packages=Y,Z[;cluster-scoped=K1,K2][;plurals=K:p,...][;assert-name-overrides=K:BaseName,...]")
+	flag.Var(&crdExtensions, "crd", "clientset mode only: repeatable; "+
+		"format: group=X;packages=Y,Z[;cluster-scoped=K1,K2]"+
+		"[;plurals=K:p,...][;assert-name-overrides=K:BaseName,...]")
 
 	flag.Parse()
 

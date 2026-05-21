@@ -93,9 +93,9 @@ func runClientsetMode(pkgName string, crds []crdConfig) (string, string, error) 
 
 	allCRDKinds := make([]configKinds, 0, len(crds))
 	for _, cfg := range crds {
-		kinds, err := discoverKinds(cfg)
-		if err != nil {
-			return "", "", fmt.Errorf("discovering CRD kinds for group %s: %w", cfg.group, err)
+		kinds, crdErr := discoverKinds(cfg)
+		if crdErr != nil {
+			return "", "", fmt.Errorf("discovering CRD kinds for group %s: %w", cfg.group, crdErr)
 		}
 		slices.SortFunc(kinds, func(a, b kind) int {
 			return cmp.Or(

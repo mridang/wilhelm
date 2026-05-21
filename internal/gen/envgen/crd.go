@@ -131,7 +131,7 @@ func kindsFromPackage(pkg *packages.Package, cfg crdConfig) []kind {
 			continue
 		}
 		assertBase := name
-		if override, ok := cfg.assertNameOverride[name]; ok {
+		if override, hasOverride := cfg.assertNameOverride[name]; hasOverride {
 			assertBase = override
 		}
 		out = append(out, kind{
