@@ -3,7 +3,9 @@
 package env
 
 import (
+	"fmt"
 	assert "github.com/mridang/wilhelm/assert"
+	v119 "github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1"
 	require "github.com/stretchr/testify/require"
 	v1 "k8s.io/api/admissionregistration/v1"
 	v1alpha1 "k8s.io/api/admissionregistration/v1alpha1"
@@ -55,6 +57,9 @@ import (
 	v1beta116 "k8s.io/api/storagemigration/v1beta1"
 	errors "k8s.io/apimachinery/pkg/api/errors"
 	v11 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	runtime "k8s.io/apimachinery/pkg/runtime"
+	schema "k8s.io/apimachinery/pkg/runtime/schema"
+	v118 "sigs.k8s.io/gateway-api/apis/v1"
 	"testing"
 )
 
@@ -1990,6 +1995,411 @@ func (env *Env) GetStorageVersionMigrationE(t *testing.T, name string) (*v1beta1
 	return env.Client.StoragemigrationV1beta1().StorageVersionMigrations().Get(env.Ctx, name, v11.GetOptions{})
 }
 
+// GetBackendTLSPolicy fetches a BackendTLSPolicy by name via the dynamic client, failing the test on error.
+func (env *Env) GetBackendTLSPolicy(t *testing.T, name string) *v118.BackendTLSPolicy {
+	t.Helper()
+	obj, err := env.GetBackendTLSPolicyE(t, name)
+	require.NoError(t, err, "failed to get BackendTLSPolicy %s", name)
+	return obj
+}
+
+// GetBackendTLSPolicyE fetches a BackendTLSPolicy by name via the dynamic client, returning the error for non-existence checks.
+func (env *Env) GetBackendTLSPolicyE(t *testing.T, name string) (*v118.BackendTLSPolicy, error) {
+	t.Helper()
+	gvr := schema.GroupVersionResource{
+		Group:    "gateway.networking.k8s.io",
+		Resource: "backendtlspolicies",
+		Version:  "v1",
+	}
+	u, err := env.DynamicClient.Resource(gvr).Namespace(env.Namespace).Get(env.Ctx, name, v11.GetOptions{})
+	if err != nil {
+		return nil, err
+	}
+	var out v118.BackendTLSPolicy
+	if convErr := runtime.DefaultUnstructuredConverter.FromUnstructured(u.Object, &out); convErr != nil {
+		return nil, fmt.Errorf("convert BackendTLSPolicy from unstructured: %w", convErr)
+	}
+	return &out, nil
+}
+
+// GetGRPCRoute fetches a GRPCRoute by name via the dynamic client, failing the test on error.
+func (env *Env) GetGRPCRoute(t *testing.T, name string) *v118.GRPCRoute {
+	t.Helper()
+	obj, err := env.GetGRPCRouteE(t, name)
+	require.NoError(t, err, "failed to get GRPCRoute %s", name)
+	return obj
+}
+
+// GetGRPCRouteE fetches a GRPCRoute by name via the dynamic client, returning the error for non-existence checks.
+func (env *Env) GetGRPCRouteE(t *testing.T, name string) (*v118.GRPCRoute, error) {
+	t.Helper()
+	gvr := schema.GroupVersionResource{
+		Group:    "gateway.networking.k8s.io",
+		Resource: "grpcroutes",
+		Version:  "v1",
+	}
+	u, err := env.DynamicClient.Resource(gvr).Namespace(env.Namespace).Get(env.Ctx, name, v11.GetOptions{})
+	if err != nil {
+		return nil, err
+	}
+	var out v118.GRPCRoute
+	if convErr := runtime.DefaultUnstructuredConverter.FromUnstructured(u.Object, &out); convErr != nil {
+		return nil, fmt.Errorf("convert GRPCRoute from unstructured: %w", convErr)
+	}
+	return &out, nil
+}
+
+// GetGateway fetches a Gateway by name via the dynamic client, failing the test on error.
+func (env *Env) GetGateway(t *testing.T, name string) *v118.Gateway {
+	t.Helper()
+	obj, err := env.GetGatewayE(t, name)
+	require.NoError(t, err, "failed to get Gateway %s", name)
+	return obj
+}
+
+// GetGatewayE fetches a Gateway by name via the dynamic client, returning the error for non-existence checks.
+func (env *Env) GetGatewayE(t *testing.T, name string) (*v118.Gateway, error) {
+	t.Helper()
+	gvr := schema.GroupVersionResource{
+		Group:    "gateway.networking.k8s.io",
+		Resource: "gateways",
+		Version:  "v1",
+	}
+	u, err := env.DynamicClient.Resource(gvr).Namespace(env.Namespace).Get(env.Ctx, name, v11.GetOptions{})
+	if err != nil {
+		return nil, err
+	}
+	var out v118.Gateway
+	if convErr := runtime.DefaultUnstructuredConverter.FromUnstructured(u.Object, &out); convErr != nil {
+		return nil, fmt.Errorf("convert Gateway from unstructured: %w", convErr)
+	}
+	return &out, nil
+}
+
+// GetGatewayClass fetches a GatewayClass by name via the dynamic client, failing the test on error.
+func (env *Env) GetGatewayClass(t *testing.T, name string) *v118.GatewayClass {
+	t.Helper()
+	obj, err := env.GetGatewayClassE(t, name)
+	require.NoError(t, err, "failed to get GatewayClass %s", name)
+	return obj
+}
+
+// GetGatewayClassE fetches a GatewayClass by name via the dynamic client, returning the error for non-existence checks.
+func (env *Env) GetGatewayClassE(t *testing.T, name string) (*v118.GatewayClass, error) {
+	t.Helper()
+	gvr := schema.GroupVersionResource{
+		Group:    "gateway.networking.k8s.io",
+		Resource: "gatewayclasses",
+		Version:  "v1",
+	}
+	u, err := env.DynamicClient.Resource(gvr).Get(env.Ctx, name, v11.GetOptions{})
+	if err != nil {
+		return nil, err
+	}
+	var out v118.GatewayClass
+	if convErr := runtime.DefaultUnstructuredConverter.FromUnstructured(u.Object, &out); convErr != nil {
+		return nil, fmt.Errorf("convert GatewayClass from unstructured: %w", convErr)
+	}
+	return &out, nil
+}
+
+// GetHTTPRoute fetches a HTTPRoute by name via the dynamic client, failing the test on error.
+func (env *Env) GetHTTPRoute(t *testing.T, name string) *v118.HTTPRoute {
+	t.Helper()
+	obj, err := env.GetHTTPRouteE(t, name)
+	require.NoError(t, err, "failed to get HTTPRoute %s", name)
+	return obj
+}
+
+// GetHTTPRouteE fetches a HTTPRoute by name via the dynamic client, returning the error for non-existence checks.
+func (env *Env) GetHTTPRouteE(t *testing.T, name string) (*v118.HTTPRoute, error) {
+	t.Helper()
+	gvr := schema.GroupVersionResource{
+		Group:    "gateway.networking.k8s.io",
+		Resource: "httproutes",
+		Version:  "v1",
+	}
+	u, err := env.DynamicClient.Resource(gvr).Namespace(env.Namespace).Get(env.Ctx, name, v11.GetOptions{})
+	if err != nil {
+		return nil, err
+	}
+	var out v118.HTTPRoute
+	if convErr := runtime.DefaultUnstructuredConverter.FromUnstructured(u.Object, &out); convErr != nil {
+		return nil, fmt.Errorf("convert HTTPRoute from unstructured: %w", convErr)
+	}
+	return &out, nil
+}
+
+// GetListenerSet fetches a ListenerSet by name via the dynamic client, failing the test on error.
+func (env *Env) GetListenerSet(t *testing.T, name string) *v118.ListenerSet {
+	t.Helper()
+	obj, err := env.GetListenerSetE(t, name)
+	require.NoError(t, err, "failed to get ListenerSet %s", name)
+	return obj
+}
+
+// GetListenerSetE fetches a ListenerSet by name via the dynamic client, returning the error for non-existence checks.
+func (env *Env) GetListenerSetE(t *testing.T, name string) (*v118.ListenerSet, error) {
+	t.Helper()
+	gvr := schema.GroupVersionResource{
+		Group:    "gateway.networking.k8s.io",
+		Resource: "listenersets",
+		Version:  "v1",
+	}
+	u, err := env.DynamicClient.Resource(gvr).Namespace(env.Namespace).Get(env.Ctx, name, v11.GetOptions{})
+	if err != nil {
+		return nil, err
+	}
+	var out v118.ListenerSet
+	if convErr := runtime.DefaultUnstructuredConverter.FromUnstructured(u.Object, &out); convErr != nil {
+		return nil, fmt.Errorf("convert ListenerSet from unstructured: %w", convErr)
+	}
+	return &out, nil
+}
+
+// GetReferenceGrant fetches a ReferenceGrant by name via the dynamic client, failing the test on error.
+func (env *Env) GetReferenceGrant(t *testing.T, name string) *v118.ReferenceGrant {
+	t.Helper()
+	obj, err := env.GetReferenceGrantE(t, name)
+	require.NoError(t, err, "failed to get ReferenceGrant %s", name)
+	return obj
+}
+
+// GetReferenceGrantE fetches a ReferenceGrant by name via the dynamic client, returning the error for non-existence checks.
+func (env *Env) GetReferenceGrantE(t *testing.T, name string) (*v118.ReferenceGrant, error) {
+	t.Helper()
+	gvr := schema.GroupVersionResource{
+		Group:    "gateway.networking.k8s.io",
+		Resource: "referencegrants",
+		Version:  "v1",
+	}
+	u, err := env.DynamicClient.Resource(gvr).Namespace(env.Namespace).Get(env.Ctx, name, v11.GetOptions{})
+	if err != nil {
+		return nil, err
+	}
+	var out v118.ReferenceGrant
+	if convErr := runtime.DefaultUnstructuredConverter.FromUnstructured(u.Object, &out); convErr != nil {
+		return nil, fmt.Errorf("convert ReferenceGrant from unstructured: %w", convErr)
+	}
+	return &out, nil
+}
+
+// GetTLSRoute fetches a TLSRoute by name via the dynamic client, failing the test on error.
+func (env *Env) GetTLSRoute(t *testing.T, name string) *v118.TLSRoute {
+	t.Helper()
+	obj, err := env.GetTLSRouteE(t, name)
+	require.NoError(t, err, "failed to get TLSRoute %s", name)
+	return obj
+}
+
+// GetTLSRouteE fetches a TLSRoute by name via the dynamic client, returning the error for non-existence checks.
+func (env *Env) GetTLSRouteE(t *testing.T, name string) (*v118.TLSRoute, error) {
+	t.Helper()
+	gvr := schema.GroupVersionResource{
+		Group:    "gateway.networking.k8s.io",
+		Resource: "tlsroutes",
+		Version:  "v1",
+	}
+	u, err := env.DynamicClient.Resource(gvr).Namespace(env.Namespace).Get(env.Ctx, name, v11.GetOptions{})
+	if err != nil {
+		return nil, err
+	}
+	var out v118.TLSRoute
+	if convErr := runtime.DefaultUnstructuredConverter.FromUnstructured(u.Object, &out); convErr != nil {
+		return nil, fmt.Errorf("convert TLSRoute from unstructured: %w", convErr)
+	}
+	return &out, nil
+}
+
+// GetAlertmanager fetches a Alertmanager by name via the dynamic client, failing the test on error.
+func (env *Env) GetAlertmanager(t *testing.T, name string) *v119.Alertmanager {
+	t.Helper()
+	obj, err := env.GetAlertmanagerE(t, name)
+	require.NoError(t, err, "failed to get Alertmanager %s", name)
+	return obj
+}
+
+// GetAlertmanagerE fetches a Alertmanager by name via the dynamic client, returning the error for non-existence checks.
+func (env *Env) GetAlertmanagerE(t *testing.T, name string) (*v119.Alertmanager, error) {
+	t.Helper()
+	gvr := schema.GroupVersionResource{
+		Group:    "monitoring.coreos.com",
+		Resource: "alertmanagers",
+		Version:  "v1",
+	}
+	u, err := env.DynamicClient.Resource(gvr).Namespace(env.Namespace).Get(env.Ctx, name, v11.GetOptions{})
+	if err != nil {
+		return nil, err
+	}
+	var out v119.Alertmanager
+	if convErr := runtime.DefaultUnstructuredConverter.FromUnstructured(u.Object, &out); convErr != nil {
+		return nil, fmt.Errorf("convert Alertmanager from unstructured: %w", convErr)
+	}
+	return &out, nil
+}
+
+// GetPodMonitor fetches a PodMonitor by name via the dynamic client, failing the test on error.
+func (env *Env) GetPodMonitor(t *testing.T, name string) *v119.PodMonitor {
+	t.Helper()
+	obj, err := env.GetPodMonitorE(t, name)
+	require.NoError(t, err, "failed to get PodMonitor %s", name)
+	return obj
+}
+
+// GetPodMonitorE fetches a PodMonitor by name via the dynamic client, returning the error for non-existence checks.
+func (env *Env) GetPodMonitorE(t *testing.T, name string) (*v119.PodMonitor, error) {
+	t.Helper()
+	gvr := schema.GroupVersionResource{
+		Group:    "monitoring.coreos.com",
+		Resource: "podmonitors",
+		Version:  "v1",
+	}
+	u, err := env.DynamicClient.Resource(gvr).Namespace(env.Namespace).Get(env.Ctx, name, v11.GetOptions{})
+	if err != nil {
+		return nil, err
+	}
+	var out v119.PodMonitor
+	if convErr := runtime.DefaultUnstructuredConverter.FromUnstructured(u.Object, &out); convErr != nil {
+		return nil, fmt.Errorf("convert PodMonitor from unstructured: %w", convErr)
+	}
+	return &out, nil
+}
+
+// GetProbe fetches a Probe by name via the dynamic client, failing the test on error.
+func (env *Env) GetProbe(t *testing.T, name string) *v119.Probe {
+	t.Helper()
+	obj, err := env.GetProbeE(t, name)
+	require.NoError(t, err, "failed to get Probe %s", name)
+	return obj
+}
+
+// GetProbeE fetches a Probe by name via the dynamic client, returning the error for non-existence checks.
+func (env *Env) GetProbeE(t *testing.T, name string) (*v119.Probe, error) {
+	t.Helper()
+	gvr := schema.GroupVersionResource{
+		Group:    "monitoring.coreos.com",
+		Resource: "probes",
+		Version:  "v1",
+	}
+	u, err := env.DynamicClient.Resource(gvr).Namespace(env.Namespace).Get(env.Ctx, name, v11.GetOptions{})
+	if err != nil {
+		return nil, err
+	}
+	var out v119.Probe
+	if convErr := runtime.DefaultUnstructuredConverter.FromUnstructured(u.Object, &out); convErr != nil {
+		return nil, fmt.Errorf("convert Probe from unstructured: %w", convErr)
+	}
+	return &out, nil
+}
+
+// GetPrometheus fetches a Prometheus by name via the dynamic client, failing the test on error.
+func (env *Env) GetPrometheus(t *testing.T, name string) *v119.Prometheus {
+	t.Helper()
+	obj, err := env.GetPrometheusE(t, name)
+	require.NoError(t, err, "failed to get Prometheus %s", name)
+	return obj
+}
+
+// GetPrometheusE fetches a Prometheus by name via the dynamic client, returning the error for non-existence checks.
+func (env *Env) GetPrometheusE(t *testing.T, name string) (*v119.Prometheus, error) {
+	t.Helper()
+	gvr := schema.GroupVersionResource{
+		Group:    "monitoring.coreos.com",
+		Resource: "prometheuses",
+		Version:  "v1",
+	}
+	u, err := env.DynamicClient.Resource(gvr).Namespace(env.Namespace).Get(env.Ctx, name, v11.GetOptions{})
+	if err != nil {
+		return nil, err
+	}
+	var out v119.Prometheus
+	if convErr := runtime.DefaultUnstructuredConverter.FromUnstructured(u.Object, &out); convErr != nil {
+		return nil, fmt.Errorf("convert Prometheus from unstructured: %w", convErr)
+	}
+	return &out, nil
+}
+
+// GetPrometheusRule fetches a PrometheusRule by name via the dynamic client, failing the test on error.
+func (env *Env) GetPrometheusRule(t *testing.T, name string) *v119.PrometheusRule {
+	t.Helper()
+	obj, err := env.GetPrometheusRuleE(t, name)
+	require.NoError(t, err, "failed to get PrometheusRule %s", name)
+	return obj
+}
+
+// GetPrometheusRuleE fetches a PrometheusRule by name via the dynamic client, returning the error for non-existence checks.
+func (env *Env) GetPrometheusRuleE(t *testing.T, name string) (*v119.PrometheusRule, error) {
+	t.Helper()
+	gvr := schema.GroupVersionResource{
+		Group:    "monitoring.coreos.com",
+		Resource: "prometheusrules",
+		Version:  "v1",
+	}
+	u, err := env.DynamicClient.Resource(gvr).Namespace(env.Namespace).Get(env.Ctx, name, v11.GetOptions{})
+	if err != nil {
+		return nil, err
+	}
+	var out v119.PrometheusRule
+	if convErr := runtime.DefaultUnstructuredConverter.FromUnstructured(u.Object, &out); convErr != nil {
+		return nil, fmt.Errorf("convert PrometheusRule from unstructured: %w", convErr)
+	}
+	return &out, nil
+}
+
+// GetServiceMonitor fetches a ServiceMonitor by name via the dynamic client, failing the test on error.
+func (env *Env) GetServiceMonitor(t *testing.T, name string) *v119.ServiceMonitor {
+	t.Helper()
+	obj, err := env.GetServiceMonitorE(t, name)
+	require.NoError(t, err, "failed to get ServiceMonitor %s", name)
+	return obj
+}
+
+// GetServiceMonitorE fetches a ServiceMonitor by name via the dynamic client, returning the error for non-existence checks.
+func (env *Env) GetServiceMonitorE(t *testing.T, name string) (*v119.ServiceMonitor, error) {
+	t.Helper()
+	gvr := schema.GroupVersionResource{
+		Group:    "monitoring.coreos.com",
+		Resource: "servicemonitors",
+		Version:  "v1",
+	}
+	u, err := env.DynamicClient.Resource(gvr).Namespace(env.Namespace).Get(env.Ctx, name, v11.GetOptions{})
+	if err != nil {
+		return nil, err
+	}
+	var out v119.ServiceMonitor
+	if convErr := runtime.DefaultUnstructuredConverter.FromUnstructured(u.Object, &out); convErr != nil {
+		return nil, fmt.Errorf("convert ServiceMonitor from unstructured: %w", convErr)
+	}
+	return &out, nil
+}
+
+// GetThanosRuler fetches a ThanosRuler by name via the dynamic client, failing the test on error.
+func (env *Env) GetThanosRuler(t *testing.T, name string) *v119.ThanosRuler {
+	t.Helper()
+	obj, err := env.GetThanosRulerE(t, name)
+	require.NoError(t, err, "failed to get ThanosRuler %s", name)
+	return obj
+}
+
+// GetThanosRulerE fetches a ThanosRuler by name via the dynamic client, returning the error for non-existence checks.
+func (env *Env) GetThanosRulerE(t *testing.T, name string) (*v119.ThanosRuler, error) {
+	t.Helper()
+	gvr := schema.GroupVersionResource{
+		Group:    "monitoring.coreos.com",
+		Resource: "thanosrulers",
+		Version:  "v1",
+	}
+	u, err := env.DynamicClient.Resource(gvr).Namespace(env.Namespace).Get(env.Ctx, name, v11.GetOptions{})
+	if err != nil {
+		return nil, err
+	}
+	var out v119.ThanosRuler
+	if convErr := runtime.DefaultUnstructuredConverter.FromUnstructured(u.Object, &out); convErr != nil {
+		return nil, fmt.Errorf("convert ThanosRuler from unstructured: %w", convErr)
+	}
+	return &out, nil
+}
+
 // AssertPartial fetches the K8s resource implied by the assertion type and
 // runs a partial assertion. The resource type is inferred from the concrete
 // assertion struct via a type switch.
@@ -2152,6 +2562,66 @@ func (env *Env) AssertPartial(t *testing.T, name string, assertion assert.Assert
 		assert.Partial(t, env.GetVolumeAttributesClass(t, name), a, name)
 	case *assert.VolumeAttributesClassAssertion:
 		assert.Partial(t, env.GetVolumeAttributesClass(t, name), *a, name)
+	case assert.BackendTLSPolicyAssertion:
+		assert.Partial(t, env.GetBackendTLSPolicy(t, name), a, name)
+	case *assert.BackendTLSPolicyAssertion:
+		assert.Partial(t, env.GetBackendTLSPolicy(t, name), *a, name)
+	case assert.GRPCRouteAssertion:
+		assert.Partial(t, env.GetGRPCRoute(t, name), a, name)
+	case *assert.GRPCRouteAssertion:
+		assert.Partial(t, env.GetGRPCRoute(t, name), *a, name)
+	case assert.GatewayAssertion:
+		assert.Partial(t, env.GetGateway(t, name), a, name)
+	case *assert.GatewayAssertion:
+		assert.Partial(t, env.GetGateway(t, name), *a, name)
+	case assert.GatewayClassAssertion:
+		assert.Partial(t, env.GetGatewayClass(t, name), a, name)
+	case *assert.GatewayClassAssertion:
+		assert.Partial(t, env.GetGatewayClass(t, name), *a, name)
+	case assert.HTTPRouteAssertion:
+		assert.Partial(t, env.GetHTTPRoute(t, name), a, name)
+	case *assert.HTTPRouteAssertion:
+		assert.Partial(t, env.GetHTTPRoute(t, name), *a, name)
+	case assert.ListenerSetAssertion:
+		assert.Partial(t, env.GetListenerSet(t, name), a, name)
+	case *assert.ListenerSetAssertion:
+		assert.Partial(t, env.GetListenerSet(t, name), *a, name)
+	case assert.ReferenceGrantAssertion:
+		assert.Partial(t, env.GetReferenceGrant(t, name), a, name)
+	case *assert.ReferenceGrantAssertion:
+		assert.Partial(t, env.GetReferenceGrant(t, name), *a, name)
+	case assert.TLSRouteAssertion:
+		assert.Partial(t, env.GetTLSRoute(t, name), a, name)
+	case *assert.TLSRouteAssertion:
+		assert.Partial(t, env.GetTLSRoute(t, name), *a, name)
+	case assert.AlertmanagerAssertion:
+		assert.Partial(t, env.GetAlertmanager(t, name), a, name)
+	case *assert.AlertmanagerAssertion:
+		assert.Partial(t, env.GetAlertmanager(t, name), *a, name)
+	case assert.PodMonitorAssertion:
+		assert.Partial(t, env.GetPodMonitor(t, name), a, name)
+	case *assert.PodMonitorAssertion:
+		assert.Partial(t, env.GetPodMonitor(t, name), *a, name)
+	case assert.MonitoringProbeAssertion:
+		assert.Partial(t, env.GetProbe(t, name), a, name)
+	case *assert.MonitoringProbeAssertion:
+		assert.Partial(t, env.GetProbe(t, name), *a, name)
+	case assert.PrometheusAssertion:
+		assert.Partial(t, env.GetPrometheus(t, name), a, name)
+	case *assert.PrometheusAssertion:
+		assert.Partial(t, env.GetPrometheus(t, name), *a, name)
+	case assert.PrometheusRuleAssertion:
+		assert.Partial(t, env.GetPrometheusRule(t, name), a, name)
+	case *assert.PrometheusRuleAssertion:
+		assert.Partial(t, env.GetPrometheusRule(t, name), *a, name)
+	case assert.ServiceMonitorAssertion:
+		assert.Partial(t, env.GetServiceMonitor(t, name), a, name)
+	case *assert.ServiceMonitorAssertion:
+		assert.Partial(t, env.GetServiceMonitor(t, name), *a, name)
+	case assert.ThanosRulerAssertion:
+		assert.Partial(t, env.GetThanosRuler(t, name), a, name)
+	case *assert.ThanosRulerAssertion:
+		assert.Partial(t, env.GetThanosRuler(t, name), *a, name)
 	default:
 		t.Fatalf("env.AssertPartial: no resource registered for assertion type %T", assertion)
 	}
@@ -2280,6 +2750,51 @@ func (env *Env) AssertNone(t *testing.T, name string, assertion assert.Assertabl
 	case assert.VolumeAttributesClassAssertion, *assert.VolumeAttributesClassAssertion:
 		_, err := env.GetVolumeAttributesClassE(t, name)
 		require.True(t, errors.IsNotFound(err), "VolumeAttributesClass %q should not exist (err: %v)", name, err)
+	case assert.BackendTLSPolicyAssertion, *assert.BackendTLSPolicyAssertion:
+		_, err := env.GetBackendTLSPolicyE(t, name)
+		require.True(t, errors.IsNotFound(err), "BackendTLSPolicy %q should not exist (err: %v)", name, err)
+	case assert.GRPCRouteAssertion, *assert.GRPCRouteAssertion:
+		_, err := env.GetGRPCRouteE(t, name)
+		require.True(t, errors.IsNotFound(err), "GRPCRoute %q should not exist (err: %v)", name, err)
+	case assert.GatewayAssertion, *assert.GatewayAssertion:
+		_, err := env.GetGatewayE(t, name)
+		require.True(t, errors.IsNotFound(err), "Gateway %q should not exist (err: %v)", name, err)
+	case assert.GatewayClassAssertion, *assert.GatewayClassAssertion:
+		_, err := env.GetGatewayClassE(t, name)
+		require.True(t, errors.IsNotFound(err), "GatewayClass %q should not exist (err: %v)", name, err)
+	case assert.HTTPRouteAssertion, *assert.HTTPRouteAssertion:
+		_, err := env.GetHTTPRouteE(t, name)
+		require.True(t, errors.IsNotFound(err), "HTTPRoute %q should not exist (err: %v)", name, err)
+	case assert.ListenerSetAssertion, *assert.ListenerSetAssertion:
+		_, err := env.GetListenerSetE(t, name)
+		require.True(t, errors.IsNotFound(err), "ListenerSet %q should not exist (err: %v)", name, err)
+	case assert.ReferenceGrantAssertion, *assert.ReferenceGrantAssertion:
+		_, err := env.GetReferenceGrantE(t, name)
+		require.True(t, errors.IsNotFound(err), "ReferenceGrant %q should not exist (err: %v)", name, err)
+	case assert.TLSRouteAssertion, *assert.TLSRouteAssertion:
+		_, err := env.GetTLSRouteE(t, name)
+		require.True(t, errors.IsNotFound(err), "TLSRoute %q should not exist (err: %v)", name, err)
+	case assert.AlertmanagerAssertion, *assert.AlertmanagerAssertion:
+		_, err := env.GetAlertmanagerE(t, name)
+		require.True(t, errors.IsNotFound(err), "Alertmanager %q should not exist (err: %v)", name, err)
+	case assert.PodMonitorAssertion, *assert.PodMonitorAssertion:
+		_, err := env.GetPodMonitorE(t, name)
+		require.True(t, errors.IsNotFound(err), "PodMonitor %q should not exist (err: %v)", name, err)
+	case assert.MonitoringProbeAssertion, *assert.MonitoringProbeAssertion:
+		_, err := env.GetProbeE(t, name)
+		require.True(t, errors.IsNotFound(err), "Probe %q should not exist (err: %v)", name, err)
+	case assert.PrometheusAssertion, *assert.PrometheusAssertion:
+		_, err := env.GetPrometheusE(t, name)
+		require.True(t, errors.IsNotFound(err), "Prometheus %q should not exist (err: %v)", name, err)
+	case assert.PrometheusRuleAssertion, *assert.PrometheusRuleAssertion:
+		_, err := env.GetPrometheusRuleE(t, name)
+		require.True(t, errors.IsNotFound(err), "PrometheusRule %q should not exist (err: %v)", name, err)
+	case assert.ServiceMonitorAssertion, *assert.ServiceMonitorAssertion:
+		_, err := env.GetServiceMonitorE(t, name)
+		require.True(t, errors.IsNotFound(err), "ServiceMonitor %q should not exist (err: %v)", name, err)
+	case assert.ThanosRulerAssertion, *assert.ThanosRulerAssertion:
+		_, err := env.GetThanosRulerE(t, name)
+		require.True(t, errors.IsNotFound(err), "ThanosRuler %q should not exist (err: %v)", name, err)
 	default:
 		t.Fatalf("env.AssertNone: no resource registered for assertion type %T", assertion)
 	}
