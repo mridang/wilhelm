@@ -1,0 +1,45 @@
+name: Run Tests
+
+on: push
+
+permissions:
+  contents: write
+
+defaults:
+  run:
+    working-directory: ./
+
+jobs:
+  app-testing:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Go
+        uses: actions/setup-go@v5
+        with:
+          go-version-file: "go.mod"
+
+      - name: Install gotestsum
+        run: go install gotest.tools/gotestsum@latest
+
+      - name: Test root module
+        run: make test
+
+      - name: Test every submodule
+        run: |
+          set -euo pipefail
+          for mod in $(find assert env -name go.mod); do
+            dir=$(dirname "$mod")
+            echo "==== $dir ===="
+            (cd "$dir" && go test -count=1 ./...)
+          done
+
+      - name: Generate coverage report
+        if: always()
+        uses: mridang/action-test-reporter@v3
+        with:
+          results-path: ".out/junit.xml"
+          coverage-path: ".out/lcov.info"

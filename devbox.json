@@ -1,0 +1,27 @@
+{
+  "$schema": "https://raw.githubusercontent.com/jetify-com/devbox/0.10.7/.schema/devbox.schema.json",
+  "packages": {
+    "dprint": "latest",
+    "go": "1.26",
+    "gotestsum": "latest",
+    "kubernetes-helm": "latest",
+    "kubectl": "latest",
+    "github:NixOS/nixpkgs/nixpkgs-unstable#golangci-lint": ""
+  },
+  "env": {
+    "GOMODCACHE": "$PWD/.go",
+    "GOROOT": null
+  },
+  "shell": {
+    "init_hook": [
+      "[ -f go.mod ] && go mod download || true"
+    ],
+    "scripts": {
+      "test": "make test",
+      "build": "go build ./...",
+      "lint": "golangci-lint run --fix",
+      "format": "dprint fmt && go fmt ./...",
+      "generate": "go generate ./..."
+    }
+  }
+}
