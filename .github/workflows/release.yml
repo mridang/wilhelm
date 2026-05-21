@@ -13,6 +13,9 @@ defaults:
   run:
     working-directory: ./
 
+env:
+  GONOSUMDB: github.com/mridang/wilhelm/*
+
 jobs:
   publish-package:
     runs-on: ubuntu-latest
