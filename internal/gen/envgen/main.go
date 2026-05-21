@@ -20,6 +20,46 @@ import (
 	"strings"
 )
 
+// crdExtensionList is a repeatable -crd flag value. Each -crd flag takes
+// a semicolon-delimited key=value string:
+//
+//	group=X;packages=Y,Z;cluster-scoped=K1,K2;plurals=K:p,...;assert-name-overrides=Kind:BaseName,...
+//
+// The assert-name-overrides key maps a Kind name to the assertion base name
+// (without the "Assertion" suffix) for kinds whose assertgen name is
+// disambiguated (e.g. Probe → MonitoringProbe).
+type crdExtensionList []crdConfig
+
+func (l *crdExtensionList) String() string { return "" }
+
+func (l *crdExtensionList) Set(s string) error {
+	cfg := crdConfig{
+		clusterScoped:      newStringSet(nil),
+		pluralOverride:     map[string]string{},
+		assertNameOverride: map[string]string{},
+	}
+	for _, part := range strings.Split(s, ";") {
+		key, val, ok := strings.Cut(part, "=")
+		if !ok {
+			continue
+		}
+		switch strings.TrimSpace(key) {
+		case "group":
+			cfg.group = strings.TrimSpace(val)
+		case "packages":
+			cfg.packages = splitAndTrim(val)
+		case "cluster-scoped":
+			cfg.clusterScoped = newStringSet(splitAndTrim(val))
+		case "plurals":
+			cfg.pluralOverride = parsePluralOverrides(val)
+		case "assert-name-overrides":
+			cfg.assertNameOverride = parsePluralOverrides(val) // same format: K:V,...
+		}
+	}
+	*l = append(*l, cfg)
+	return nil
+}
+
 const (
 	generatedFilePerm = 0o600
 	rawDumpFilePerm   = 0o600
@@ -42,6 +82,11 @@ func main() {
 	pluralsFlag := flag.String("plurals", "",
 		"crd mode only: comma-separated Kind:plural overrides (e.g. Policy:policies)")
 
+	// Clientset-mode CRD extension: repeatable -crd flag.
+	var crdExtensions crdExtensionList
+	flag.Var(&crdExtensions, "crd",
+		"clientset mode only: repeatable; format: group=X;packages=Y,Z[;cluster-scoped=K1,K2][;plurals=K:p,...][;assert-name-overrides=K:BaseName,...]")
+
 	flag.Parse()
 
 	if *outFlag == "" {
@@ -55,7 +100,7 @@ func main() {
 	)
 	switch *mode {
 	case "clientset":
-		rendered, summary, err = runClientsetMode(*pkgFlag)
+		rendered, summary, err = runClientsetMode(*pkgFlag, crdExtensions)
 	case "crd":
 		rendered, summary, err = runCRDMode(crdConfig{
 			pkgName:        *pkgFlag,

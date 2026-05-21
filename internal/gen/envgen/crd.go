@@ -28,26 +28,34 @@ var (
 
 // crdConfig holds the inputs needed for one CRD-mode invocation.
 type crdConfig struct {
-	pkgName        string
-	group          string
-	packages       []string
-	assertPkg      string
-	clusterScoped  stringSet
-	pluralOverride map[string]string
+	pkgName            string
+	group              string
+	packages           []string
+	assertPkg          string
+	clusterScoped      stringSet
+	pluralOverride     map[string]string
+	assertNameOverride map[string]string // Kind → assertion base name (without "Assertion" suffix)
 }
 
 // kind describes one top-level Kind to be generated.
 type kind struct {
-	TypeName    string // e.g. "Application"
-	TypePkgPath string // import path of the type
-	Version     string // e.g. "v1alpha1" (last path segment)
-	Plural      string // resource (lowercase plural)
-	Namespaced  bool
+	TypeName       string // e.g. "Application"
+	TypePkgPath    string // import path of the type
+	Version        string // e.g. "v1alpha1" (last path segment)
+	Plural         string // resource (lowercase plural)
+	Namespaced     bool
+	AssertBaseName string // assertion base name (without "Assertion"); defaults to TypeName
 }
 
 // AssertName returns the matching assertion struct name in the CRD's
 // assert subpackage.
-func (k kind) AssertName() string { return k.TypeName + "Assertion" }
+func (k kind) AssertName() string {
+	base := k.AssertBaseName
+	if base == "" {
+		base = k.TypeName
+	}
+	return base + "Assertion"
+}
 
 func runCRDMode(cfg crdConfig) (string, string, error) {
 	if len(cfg.packages) == 0 {
@@ -122,12 +130,17 @@ func kindsFromPackage(pkg *packages.Package, cfg crdConfig) []kind {
 		if !isTopLevelKind(struc) {
 			continue
 		}
+		assertBase := name
+		if override, ok := cfg.assertNameOverride[name]; ok {
+			assertBase = override
+		}
 		out = append(out, kind{
-			TypeName:    name,
-			TypePkgPath: pkg.PkgPath,
-			Version:     version,
-			Plural:      pluralize(name, cfg.pluralOverride),
-			Namespaced:  !cfg.clusterScoped.has(name),
+			TypeName:       name,
+			TypePkgPath:    pkg.PkgPath,
+			Version:        version,
+			Plural:         pluralize(name, cfg.pluralOverride),
+			Namespaced:     !cfg.clusterScoped.has(name),
+			AssertBaseName: assertBase,
 		})
 	}
 	return out
