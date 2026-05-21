@@ -93,11 +93,14 @@ do_tag() {
   # Skipped when invoked outside a git checkout (e.g. `make release-dry`).
   if git -C "$ROOT" rev-parse --git-dir >/dev/null 2>&1; then
     echo "==> tagging modules at v$VERSION"
-    git -C "$ROOT" tag "v$VERSION"
+    # The root tag is already created by semantic-release before publishCmd
+    # runs; skip it silently if it exists so the submodule loop is not
+    # short-circuited by set -e.
+    git -C "$ROOT" tag "v$VERSION" 2>/dev/null || true
     for mod in "${MODULES[@]}"; do
       rel=${mod#"$ROOT/"}
       prefix=$(dirname "$rel")
-      git -C "$ROOT" tag "$prefix/v$VERSION"
+      git -C "$ROOT" tag "$prefix/v$VERSION" 2>/dev/null || true
     done
     echo "OK: tagged ${#MODULES[@]} submodules + root at v$VERSION"
   else
