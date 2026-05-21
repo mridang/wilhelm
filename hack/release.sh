@@ -85,6 +85,12 @@ do_tag() {
       prefix=$(dirname "$rel")
       git -C "$ROOT" tag "$prefix/v$VERSION" 2>/dev/null || true
     done
+    echo "==> pushing submodule tags to origin"
+    for mod in "${MODULES[@]}"; do
+      rel=${mod#"$ROOT/"}
+      prefix=$(dirname "$rel")
+      git -C "$ROOT" push origin "refs/tags/$prefix/v$VERSION" 2>/dev/null || true
+    done
     echo "OK: tagged ${#MODULES[@]} submodules + root at v$VERSION"
   else
     echo "==> skipping git tagging ($ROOT is not a git checkout)"
