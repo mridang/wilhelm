@@ -3,8 +3,8 @@ module github.com/mridang/wilhelm/env/velero/api
 go 1.26.2
 
 require (
-	github.com/mridang/wilhelm v1.1.2
-	github.com/mridang/wilhelm/assert/velero/api v1.1.2
+	github.com/mridang/wilhelm v1.1.3
+	github.com/mridang/wilhelm/assert/velero/api v1.1.3
 	github.com/stretchr/testify v1.11.1
 	github.com/vmware-tanzu/velero v1.18.1
 	k8s.io/apimachinery v0.36.1
