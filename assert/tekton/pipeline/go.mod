@@ -3,7 +3,7 @@ module github.com/mridang/wilhelm/assert/tekton/pipeline
 go 1.26.2
 
 require (
-	github.com/mridang/wilhelm v1.1.1
+	github.com/mridang/wilhelm v1.1.2
 	github.com/tektoncd/pipeline v1.12.0
 )
 
