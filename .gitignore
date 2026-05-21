@@ -1,0 +1,14 @@
+# Editor / IDE
+.idea
+.vscode
+
+# devbox
+.devbox
+.go
+
+# build/test output
+build
+.out
+
+# OS
+.DS_Store

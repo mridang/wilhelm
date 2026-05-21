@@ -1,0 +1,39 @@
+name: Lint Code (Golint)
+
+on: push
+
+permissions:
+  contents: write
+
+defaults:
+  run:
+    working-directory: ./
+
+jobs:
+  code-linting:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Go
+        uses: actions/setup-go@v5
+        with:
+          go-version-file: "go.mod"
+
+      - name: Lint root module
+        uses: golangci/golangci-lint-action@v9
+        with:
+          version: v2.6.2
+          install-mode: goinstall
+
+      - name: Lint every submodule
+        run: |
+          set -euo pipefail
+          go install github.com/golangci/golangci-lint/cmd/golangci-lint@v2.6.2
+          for mod in $(find assert env -name go.mod); do
+            dir=$(dirname "$mod")
+            echo "==== $dir ===="
+            (cd "$dir" && golangci-lint run ./...)
+          done
