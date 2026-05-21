@@ -9,6 +9,9 @@ defaults:
   run:
     working-directory: ./
 
+env:
+  GONOSUMDB: github.com/mridang/wilhelm/*
+
 jobs:
   code-linting:
     runs-on: ubuntu-latest
