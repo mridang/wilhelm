@@ -4,7 +4,7 @@ go 1.26.2
 
 require (
 	github.com/cert-manager/cert-manager v1.20.2
-	github.com/mridang/wilhelm v1.1.0
+	github.com/mridang/wilhelm v1.1.1
 )
 
 require (
