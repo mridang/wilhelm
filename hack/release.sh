@@ -5,9 +5,8 @@
 # in two separate lifecycle steps:
 #
 #   --prepare <version>  (prepareCmd)
-#     1. Removes local `replace github.com/mridang/wilhelm ... => ...` lines.
-#     2. Sets every `require github.com/mridang/wilhelm[...]` line to the
-#        release version.
+#     Sets every `require github.com/mridang/wilhelm[...]` line to the
+#     release version.
 #
 #   --tag <version>  (publishCmd)
 #     Tags every submodule on the current commit.  This step is intentionally
@@ -50,21 +49,6 @@ ROOT=$(pwd)
 # Submodule list — every directory under assert/ or env/ with its own go.mod.
 mapfile -t MODULES < <(find "$ROOT/assert" "$ROOT/env" -name go.mod -print)
 
-strip_replaces() {
-  local f=$1
-  # Drop every line between (and including) the `// >>> wilhelm:dev-only`
-  # and `// <<< wilhelm:dev-only` marker lines, plus the blank line that
-  # immediately follows. The markers are emitted by hack/scaffold-crd.sh.
-  awk '
-    /^\/\/ >>> wilhelm:dev-only/ { in_block = 1; next }
-    /^\/\/ <<< wilhelm:dev-only/ { in_block = 0; eat_blank = 1; next }
-    in_block { next }
-    eat_blank && /^$/ { eat_blank = 0; next }
-    { eat_blank = 0; print }
-  ' "$f" > "$f.new"
-  mv "$f.new" "$f"
-}
-
 pin_requires() {
   local f=$1
   # Replace every wilhelm require line's pseudo-version with the release
@@ -80,7 +64,6 @@ pin_requires() {
 do_prepare() {
   for mod in "${MODULES[@]}"; do
     echo "==> $mod"
-    strip_replaces "$mod"
     pin_requires "$mod"
   done
   echo "OK: prepared release v$VERSION across ${#MODULES[@]} submodules"

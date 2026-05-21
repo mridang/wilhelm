@@ -54,13 +54,6 @@ scaffold_assert() {
   pushd "$family_dir" >/dev/null
   if [[ ! -f go.mod ]]; then
     GOWORK=off go mod init "github.com/mridang/wilhelm/assert/$FAMILY"
-    cat >> go.mod <<EOF
-
-// >>> wilhelm:dev-only (stripped by hack/release.sh) >>>
-//nolint:gomoddirectives // local replace, stripped at release
-replace github.com/mridang/wilhelm => $DOTDOT
-// <<< wilhelm:dev-only <<<
-EOF
   fi
   popd >/dev/null
 
@@ -102,16 +95,6 @@ scaffold_env() {
   pushd "$family_dir" >/dev/null
   if [[ ! -f go.mod ]]; then
     GOWORK=off go mod init "github.com/mridang/wilhelm/env/$FAMILY"
-    cat >> go.mod <<EOF
-
-// >>> wilhelm:dev-only (stripped by hack/release.sh) >>>
-//nolint:gomoddirectives // local replace, stripped at release
-replace github.com/mridang/wilhelm => $DOTDOT
-
-//nolint:gomoddirectives // local replace, stripped at release
-replace github.com/mridang/wilhelm/assert/$FAMILY => $DOTDOT/assert/$FAMILY
-// <<< wilhelm:dev-only <<<
-EOF
   fi
   popd >/dev/null
 
