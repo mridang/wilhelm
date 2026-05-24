@@ -4,7 +4,7 @@ go 1.26.2
 
 require (
 	github.com/fluxcd/source-controller/api v1.8.5
-	github.com/mridang/wilhelm v1.1.4
+	github.com/mridang/wilhelm v1.1.5
 )
 
 require (

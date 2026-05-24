@@ -3,7 +3,7 @@ module github.com/mridang/wilhelm/assert/traefik/io
 go 1.26.2
 
 require (
-	github.com/mridang/wilhelm v1.1.4
+	github.com/mridang/wilhelm v1.1.5
 	github.com/traefik/traefik/v3 v3.2.0
 )
 
