@@ -7,10 +7,9 @@
     "@semantic-release/commit-analyzer",
     "@semantic-release/release-notes-generator",
     [
-      "@semantic-release/exec",
+      "@mridang/semantic-release-gomod",
       {
-        "prepareCmd": "bash hack/release.sh --prepare ${nextRelease.version}",
-        "publishCmd": "bash hack/release.sh --tag ${nextRelease.version}"
+        "skipGoModTidy": true
       }
     ],
     [

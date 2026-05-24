@@ -1,4 +1,4 @@
-.PHONY: default build test lint format format-check generate generate-all clean clean-coverage ensure-gotestsum crd-list verify-all release-dry
+.PHONY: default build test lint format format-check generate generate-all clean clean-coverage ensure-gotestsum crd-list verify-all
 
 export GO111MODULE=on
 
@@ -46,20 +46,6 @@ crd-list:
 # verify-all builds and lints every wilhelm module (root + every submodule).
 verify-all:
 	@bash hack/verify-all.sh
-
-# release-dry runs hack/release.sh with a fake version against a copy of
-# every go.mod, then diffs the result. Use to sanity-check the release
-# rewrite before semantic-release invokes it for real.
-release-dry:
-	@tmp=$$(mktemp -d) && trap "rm -rf $$tmp" EXIT && \
-		cp -r go.mod go.sum go.work assert env $$tmp/ && \
-		(cd $$tmp && bash $(CURDIR)/hack/release.sh 0.0.0-dry) && \
-		echo "=== diff ===" && \
-		diff -ruN go.mod $$tmp/go.mod || true && \
-		for m in $$(find $$tmp/assert $$tmp/env -name go.mod); do \
-			rel=$${m#$$tmp/}; \
-			diff -ruN $$rel $$m || true; \
-		done
 
 clean-coverage:
 	rm -rf .out
