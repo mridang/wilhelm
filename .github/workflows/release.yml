@@ -16,6 +16,10 @@ defaults:
 env:
   GONOSUMDB: github.com/mridang/wilhelm/*
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false
+
 jobs:
   publish-package:
     runs-on: ubuntu-latest
