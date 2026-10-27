@@ -18,5 +18,7 @@ go run github.com/mridang/wilhelm/internal/gen/typesgen \
   -out crd/v1alpha1
 ```
 
+Pass `-types-only` to skip the entry package's functions and copy just its types (with `DeepCopy*` methods and typed constants), for upstreams whose functions drag in far more of the module than the types are worth. A type declared identically in two packages is kept once.
+
 Use `-src <dir>` to read from a local checkout instead of downloading.
 Bump `-version` to refresh the copy.

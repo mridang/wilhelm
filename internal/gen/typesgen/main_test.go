@@ -154,6 +154,44 @@ type More struct{ M other.Mode }
 	require.ErrorContains(t, run(cfg), "type Mode exists in both")
 }
 
+func TestRunTypesOnlyDropsEntryFunctionsAndKeepsEveryEntryType(t *testing.T) {
+	cfg := fixture(t)
+	cfg.typesOnly = true
+	writeFile(t, cfg.srcDir, "pkg/crd/v1/logic.go", `package v1
+
+import "example.com/up/pkg/missing"
+
+type Standalone struct{ Name string }
+
+func Validate() error { return missing.Check() }
+`)
+	require.NoError(t, run(cfg))
+
+	require.NoFileExists(t, filepath.Join(cfg.out, "types.go"))
+	got := read(t, cfg, "zz_extracted.go")
+	for _, want := range []string{"type Thing struct", "type Standalone struct", "type Inner struct", "func (in *Thing) DeepCopy()"} {
+		require.Contains(t, got, want)
+	}
+	require.NotContains(t, got, "Validate")
+}
+
+func TestRunKeepsOneCopyOfATypeDeclaredIdenticallyInTwoPackages(t *testing.T) {
+	cfg := fixture(t)
+	cfg.typesOnly = true
+	writeFile(t, cfg.srcDir, "pkg/other/dup.go", `package other
+
+type Mode string
+`)
+	writeFile(t, cfg.srcDir, "pkg/crd/v1/more.go", `package v1
+
+import "example.com/up/pkg/other"
+
+type More struct{ M other.Mode }
+`)
+	require.NoError(t, run(cfg))
+	require.Equal(t, 1, strings.Count(read(t, cfg, "zz_extracted.go"), "type Mode string"))
+}
+
 func TestRunCopiesUpstreamLicenseNextToSources(t *testing.T) {
 	cfg := fixture(t)
 	require.NoError(t, run(cfg))

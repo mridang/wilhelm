@@ -4,9 +4,7 @@ package v1
 
 import (
 	assert "github.com/mridang/wilhelm/assert"
-	config "github.com/tektoncd/pipeline/pkg/apis/config"
-	pod "github.com/tektoncd/pipeline/pkg/apis/pipeline/pod"
-	v1 "github.com/tektoncd/pipeline/pkg/apis/pipeline/v1"
+	v1 "github.com/mridang/wilhelm/assert/tekton/pipeline/crd/v1"
 	v12 "k8s.io/api/core/v1"
 	v11 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	runtime "k8s.io/apimachinery/pkg/runtime"
@@ -53,6 +51,27 @@ type ChildStatusReferenceAssertion struct {
 // IsAssertable marks ChildStatusReferenceAssertion as an Assertable.
 func (_ ChildStatusReferenceAssertion) IsAssertable() {}
 
+// CustomRunResultAssertion is the assertion struct for CustomRunResult.
+type CustomRunResultAssertion struct {
+	Name  assert.Opt[string]
+	Value assert.Opt[string]
+}
+
+// IsAssertable marks CustomRunResultAssertion as an Assertable.
+func (_ CustomRunResultAssertion) IsAssertable() {}
+
+// CustomRunStatusFieldsAssertion is the assertion struct for CustomRunStatusFields.
+type CustomRunStatusFieldsAssertion struct {
+	StartTime      assert.Opt[*v11.Time]
+	CompletionTime assert.Opt[*v11.Time]
+	Results        assert.Opt[[]CustomRunResultAssertion]
+	RetriesStatus  assert.Opt[[]v1.CustomRunStatus]
+	ExtraFields    assert.Opt[runtime.RawExtension]
+}
+
+// IsAssertable marks CustomRunStatusFieldsAssertion as an Assertable.
+func (_ CustomRunStatusFieldsAssertion) IsAssertable() {}
+
 // EmbeddedTaskAssertion is the assertion struct for EmbeddedTask.
 type EmbeddedTaskAssertion struct {
 	TypeMeta assert.Opt[runtime.TypeMeta]
@@ -63,6 +82,37 @@ type EmbeddedTaskAssertion struct {
 
 // IsAssertable marks EmbeddedTaskAssertion as an Assertable.
 func (_ EmbeddedTaskAssertion) IsAssertable() {}
+
+// FeatureFlagsAssertion is the assertion struct for FeatureFlags.
+type FeatureFlagsAssertion struct {
+	DisableCredsInit                         assert.Opt[bool]
+	RunningInEnvWithInjectedSidecars         assert.Opt[bool]
+	RequireGitSSHSecretKnownHosts            assert.Opt[bool]
+	EnableAPIFields                          assert.Opt[string]
+	SendCloudEventsForRuns                   assert.Opt[bool]
+	AwaitSidecarReadiness                    assert.Opt[bool]
+	EnforceNonfalsifiability                 assert.Opt[string]
+	EnableKeepPodOnCancel                    assert.Opt[bool]
+	VerificationNoMatchPolicy                assert.Opt[string]
+	EnableProvenanceInStatus                 assert.Opt[bool]
+	ResultExtractionMethod                   assert.Opt[string]
+	MaxResultSize                            assert.Opt[int]
+	SetSecurityContext                       assert.Opt[bool]
+	SetSecurityContextReadOnlyRootFilesystem assert.Opt[bool]
+	Coschedule                               assert.Opt[string]
+	EnableCELInWhenExpression                assert.Opt[bool]
+	EnableStepActions                        assert.Opt[bool]
+	EnableParamEnum                          assert.Opt[bool]
+	EnableArtifacts                          assert.Opt[bool]
+	DisableInlineSpec                        assert.Opt[string]
+	EnableConciseResolverSyntax              assert.Opt[bool]
+	EnableKubernetesSidecar                  assert.Opt[bool]
+	EnableWaitExponentialBackoff             assert.Opt[bool]
+	DeprecatedEnableTektonOCIBundles         assert.Opt[*bool]
+}
+
+// IsAssertable marks FeatureFlagsAssertion as an Assertable.
+func (_ FeatureFlagsAssertion) IsAssertable() {}
 
 // IncludeParamsAssertion is the assertion struct for IncludeParams.
 type IncludeParamsAssertion struct {
@@ -264,7 +314,7 @@ func (_ PipelineTaskRunAssertion) IsAssertable() {}
 type PipelineTaskRunSpecAssertion struct {
 	PipelineTaskName   assert.Opt[string]
 	ServiceAccountName assert.Opt[string]
-	PodTemplate        assert.Opt[*pod.PodTemplate]
+	PodTemplate        assert.Opt[*v1.PodTemplate]
 	StepSpecs          assert.Opt[[]TaskRunStepSpecAssertion]
 	SidecarSpecs       assert.Opt[[]TaskRunSidecarSpecAssertion]
 	Metadata           PipelineTaskMetadataAssertion
@@ -277,7 +327,7 @@ func (_ PipelineTaskRunSpecAssertion) IsAssertable() {}
 
 // PipelineTaskRunTemplateAssertion is the assertion struct for PipelineTaskRunTemplate.
 type PipelineTaskRunTemplateAssertion struct {
-	PodTemplate        assert.Opt[*pod.PodTemplate]
+	PodTemplate        assert.Opt[*v1.PodTemplate]
 	ServiceAccountName assert.Opt[string]
 }
 
@@ -305,7 +355,7 @@ func (_ PropertySpecAssertion) IsAssertable() {}
 // ProvenanceAssertion is the assertion struct for Provenance.
 type ProvenanceAssertion struct {
 	RefSource    RefSourceAssertion
-	FeatureFlags assert.Opt[*config.FeatureFlags]
+	FeatureFlags FeatureFlagsAssertion
 }
 
 // IsAssertable marks ProvenanceAssertion as an Assertable.
@@ -349,15 +399,6 @@ type ResultRefAssertion struct {
 
 // IsAssertable marks ResultRefAssertion as an Assertable.
 func (_ ResultRefAssertion) IsAssertable() {}
-
-// SchemeGroupVersionAssertion is the assertion struct for GroupVersion.
-type SchemeGroupVersionAssertion struct {
-	Group   assert.Opt[string]
-	Version assert.Opt[string]
-}
-
-// IsAssertable marks SchemeGroupVersionAssertion as an Assertable.
-func (_ SchemeGroupVersionAssertion) IsAssertable() {}
 
 // SidecarAssertion is the assertion struct for Sidecar.
 type SidecarAssertion struct {
@@ -594,7 +635,7 @@ type TaskRunSpecAssertion struct {
 	StatusMessage      assert.Opt[v1.TaskRunSpecStatusMessage]
 	Retries            assert.Opt[int]
 	Timeout            assert.Opt[*v11.Duration]
-	PodTemplate        assert.Opt[*pod.PodTemplate]
+	PodTemplate        assert.Opt[*v1.PodTemplate]
 	Workspaces         assert.Opt[[]WorkspaceBindingAssertion]
 	StepSpecs          assert.Opt[[]TaskRunStepSpecAssertion]
 	SidecarSpecs       assert.Opt[[]TaskRunSidecarSpecAssertion]
@@ -647,6 +688,31 @@ type TaskSpecAssertion struct {
 
 // IsAssertable marks TaskSpecAssertion as an Assertable.
 func (_ TaskSpecAssertion) IsAssertable() {}
+
+// TemplateAssertion is the assertion struct for Template.
+type TemplateAssertion struct {
+	NodeSelector                 assert.Opt[map[string]string]
+	Env                          assert.Opt[[]v12.EnvVar]
+	Tolerations                  assert.Opt[[]v12.Toleration]
+	Affinity                     assert.Opt[*v12.Affinity]
+	SecurityContext              assert.Opt[*v12.PodSecurityContext]
+	Volumes                      assert.Opt[v1.Volumes]
+	RuntimeClassName             assert.Opt[*string]
+	AutomountServiceAccountToken assert.Opt[*bool]
+	DNSPolicy                    assert.Opt[*v12.DNSPolicy]
+	DNSConfig                    assert.Opt[*v12.PodDNSConfig]
+	EnableServiceLinks           assert.Opt[*bool]
+	PriorityClassName            assert.Opt[*string]
+	SchedulerName                assert.Opt[string]
+	ImagePullSecrets             assert.Opt[[]v12.LocalObjectReference]
+	HostAliases                  assert.Opt[[]v12.HostAlias]
+	HostNetwork                  assert.Opt[bool]
+	HostUsers                    assert.Opt[*bool]
+	TopologySpreadConstraints    assert.Opt[[]v12.TopologySpreadConstraint]
+}
+
+// IsAssertable marks TemplateAssertion as an Assertable.
+func (_ TemplateAssertion) IsAssertable() {}
 
 // TimeoutFieldsAssertion is the assertion struct for TimeoutFields.
 type TimeoutFieldsAssertion struct {

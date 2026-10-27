@@ -5,10 +5,10 @@ package v1
 import (
 	"fmt"
 	assert "github.com/mridang/wilhelm/assert"
+	v1 "github.com/mridang/wilhelm/assert/tekton/pipeline/crd/v1"
 	v12 "github.com/mridang/wilhelm/assert/tekton/pipeline/v1"
 	env "github.com/mridang/wilhelm/env"
 	require "github.com/stretchr/testify/require"
-	v1 "github.com/tektoncd/pipeline/pkg/apis/pipeline/v1"
 	errors "k8s.io/apimachinery/pkg/api/errors"
 	v11 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	runtime "k8s.io/apimachinery/pkg/runtime"
