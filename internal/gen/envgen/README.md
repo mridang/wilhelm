@@ -67,10 +67,14 @@ unique, so the generator scores each candidate and keeps the highest-priority
 one at the short name (`GetHorizontalPodAutoscaler`). The rest get prefixed
 with the group method name (e.g. `GetAutoscalingV1Beta1HorizontalPodAutoscaler`).
 
+Alpha API versions (`v1alpha1` and so on) are skipped, because Kubernetes
+removes them between releases and a committed getter for one would stop
+compiling when the libraries are bumped.
+
 Priority order:
 
 1. Has an assertion struct (+1000)
-2. Stable > beta > alpha (+200 / +100 / +0)
+2. Stable > beta (+200 / +100)
 3. Higher version number wins ties (e.g. `v2` > `v1`)
 
 ## Determinism

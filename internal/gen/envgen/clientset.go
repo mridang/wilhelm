@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"go/types"
 	"os"
+	"path"
 	"slices"
 	"strings"
 
@@ -17,7 +18,6 @@ const (
 	priorityAssertion = 1000
 	priorityStable    = 200
 	priorityBeta      = 100
-	priorityAlpha     = 0
 	decimalBase       = 10
 )
 
@@ -204,6 +204,9 @@ func resourceForGetter(
 	if !ok {
 		return resource{}, false
 	}
+	if isAlphaAPI(typePkgPath) {
+		return resource{}, false
+	}
 	hasAssertion := assertPkgs[typePkgPath] &&
 		!strings.HasSuffix(typeName, "List") &&
 		!strings.HasSuffix(typeName, "Status")
@@ -216,6 +219,13 @@ func resourceForGetter(
 		Namespaced:   namespaced,
 		HasAssertion: hasAssertion,
 	}, true
+}
+
+// isAlphaAPI reports whether the package holds an alpha API version, such as
+// k8s.io/api/scheduling/v1alpha2. Alpha versions are dropped between Kubernetes
+// releases, so a getter for one stops compiling when the libraries are bumped.
+func isAlphaAPI(pkgPath string) bool {
+	return strings.Contains(path.Base(pkgPath), "alpha")
 }
 
 // typeFromGetMethod finds the Get() method on a resource interface and
@@ -290,8 +300,6 @@ func resourcePriority(r resource) int {
 		p += priorityAssertion
 	}
 	switch {
-	case strings.Contains(r.TypePkgPath, "alpha"):
-		p += priorityAlpha
 	case strings.Contains(r.TypePkgPath, "beta"):
 		p += priorityBeta
 	default:
