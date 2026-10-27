@@ -63,4 +63,4 @@ go generate ./assert/...
 ```
 
 Re-runs [assertgen](../internal/gen/assertgen) against the upstream K8s API
-packages declared in [../internal/anchors](../internal/anchors).
+packages declared in [../internal/gen/anchors](../internal/gen/anchors).

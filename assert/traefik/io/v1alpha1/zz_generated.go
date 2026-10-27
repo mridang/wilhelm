@@ -4,13 +4,19 @@ package v1alpha1
 
 import (
 	assert "github.com/mridang/wilhelm/assert"
-	dynamic "github.com/traefik/traefik/v3/pkg/config/dynamic"
-	tls "github.com/traefik/traefik/v3/pkg/tls"
-	types "github.com/traefik/traefik/v3/pkg/types"
+	v1alpha1 "github.com/mridang/wilhelm/assert/traefik/io/crd/v1alpha1"
 	v11 "k8s.io/apiextensions-apiserver/pkg/apis/apiextensions/v1"
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	intstr "k8s.io/apimachinery/pkg/util/intstr"
 )
+
+// AddPrefixAssertion is the assertion struct for AddPrefix.
+type AddPrefixAssertion struct {
+	Prefix assert.Opt[string]
+}
+
+// IsAssertable marks AddPrefixAssertion as an Assertable.
+func (_ AddPrefixAssertion) IsAssertable() {}
 
 // BasicAuthAssertion is the assertion struct for BasicAuth.
 type BasicAuthAssertion struct {
@@ -22,6 +28,18 @@ type BasicAuthAssertion struct {
 
 // IsAssertable marks BasicAuthAssertion as an Assertable.
 func (_ BasicAuthAssertion) IsAssertable() {}
+
+// BufferingAssertion is the assertion struct for Buffering.
+type BufferingAssertion struct {
+	MaxRequestBodyBytes  assert.Opt[int64]
+	MemRequestBodyBytes  assert.Opt[int64]
+	MaxResponseBodyBytes assert.Opt[int64]
+	MemResponseBodyBytes assert.Opt[int64]
+	RetryExpression      assert.Opt[string]
+}
+
+// IsAssertable marks BufferingAssertion as an Assertable.
+func (_ BufferingAssertion) IsAssertable() {}
 
 // CertificateAssertion is the assertion struct for Certificate.
 type CertificateAssertion struct {
@@ -65,11 +83,19 @@ type ClientTLSAssertion struct {
 	CASecret           assert.Opt[string]
 	CertSecret         assert.Opt[string]
 	InsecureSkipVerify assert.Opt[bool]
-	CAOptional         assert.Opt[*bool]
 }
 
 // IsAssertable marks ClientTLSAssertion as an Assertable.
 func (_ ClientTLSAssertion) IsAssertable() {}
+
+// ClientTLSWithCAOptionalAssertion is the assertion struct for ClientTLSWithCAOptional.
+type ClientTLSWithCAOptionalAssertion struct {
+	ClientTLS  ClientTLSAssertion
+	CAOptional assert.Opt[*bool]
+}
+
+// IsAssertable marks ClientTLSWithCAOptionalAssertion as an Assertable.
+func (_ ClientTLSWithCAOptionalAssertion) IsAssertable() {}
 
 // CompressAssertion is the assertion struct for Compress.
 type CompressAssertion struct {
@@ -83,6 +109,28 @@ type CompressAssertion struct {
 // IsAssertable marks CompressAssertion as an Assertable.
 func (_ CompressAssertion) IsAssertable() {}
 
+// ContentTypeAssertion is the assertion struct for ContentType.
+type ContentTypeAssertion struct {
+	AutoDetect assert.Opt[*bool]
+}
+
+// IsAssertable marks ContentTypeAssertion as an Assertable.
+func (_ ContentTypeAssertion) IsAssertable() {}
+
+// CookieAssertion is the assertion struct for Cookie.
+type CookieAssertion struct {
+	Name     assert.Opt[string]
+	Secure   assert.Opt[bool]
+	HTTPOnly assert.Opt[bool]
+	SameSite assert.Opt[string]
+	MaxAge   assert.Opt[int]
+	Path     assert.Opt[*string]
+	Domain   assert.Opt[string]
+}
+
+// IsAssertable marks CookieAssertion as an Assertable.
+func (_ CookieAssertion) IsAssertable() {}
+
 // DigestAuthAssertion is the assertion struct for DigestAuth.
 type DigestAuthAssertion struct {
 	Secret       assert.Opt[string]
@@ -94,11 +142,22 @@ type DigestAuthAssertion struct {
 // IsAssertable marks DigestAuthAssertion as an Assertable.
 func (_ DigestAuthAssertion) IsAssertable() {}
 
+// DomainAssertion is the assertion struct for Domain.
+type DomainAssertion struct {
+	Main assert.Opt[string]
+	SANs assert.Opt[[]string]
+}
+
+// IsAssertable marks DomainAssertion as an Assertable.
+func (_ DomainAssertion) IsAssertable() {}
+
 // ErrorPageAssertion is the assertion struct for ErrorPage.
 type ErrorPageAssertion struct {
-	Status  assert.Opt[[]string]
-	Service ServiceAssertion
-	Query   assert.Opt[string]
+	Status              assert.Opt[[]string]
+	StatusRewrites      assert.Opt[map[string]int]
+	Service             ServiceAssertion
+	Query               assert.Opt[string]
+	ErrorRequestHeaders assert.Opt[[]string]
 }
 
 // IsAssertable marks ErrorPageAssertion as an Assertable.
@@ -107,12 +166,18 @@ func (_ ErrorPageAssertion) IsAssertable() {}
 // ForwardAuthAssertion is the assertion struct for ForwardAuth.
 type ForwardAuthAssertion struct {
 	Address                  assert.Opt[string]
-	TrustForwardHeader       assert.Opt[bool]
+	TrustForwardHeader       assert.Opt[*bool]
 	AuthResponseHeaders      assert.Opt[[]string]
 	AuthResponseHeadersRegex assert.Opt[string]
 	AuthRequestHeaders       assert.Opt[[]string]
-	TLS                      ClientTLSAssertion
+	TLS                      ClientTLSWithCAOptionalAssertion
+	MaxResponseBodySize      assert.Opt[*int64]
 	AddAuthCookiesToResponse assert.Opt[[]string]
+	HeaderField              assert.Opt[string]
+	ForwardBody              assert.Opt[bool]
+	MaxBodySize              assert.Opt[*int64]
+	PreserveLocationHeader   assert.Opt[bool]
+	PreserveRequestMethod    assert.Opt[bool]
 }
 
 // IsAssertable marks ForwardAuthAssertion as an Assertable.
@@ -130,6 +195,90 @@ type ForwardingTimeoutsAssertion struct {
 // IsAssertable marks ForwardingTimeoutsAssertion as an Assertable.
 func (_ ForwardingTimeoutsAssertion) IsAssertable() {}
 
+// GeneratedCertAssertion is the assertion struct for GeneratedCert.
+type GeneratedCertAssertion struct {
+	Resolver assert.Opt[string]
+	Domain   DomainAssertion
+}
+
+// IsAssertable marks GeneratedCertAssertion as an Assertable.
+func (_ GeneratedCertAssertion) IsAssertable() {}
+
+// GrpcWebAssertion is the assertion struct for GrpcWeb.
+type GrpcWebAssertion struct {
+	AllowOrigins assert.Opt[[]string]
+}
+
+// IsAssertable marks GrpcWebAssertion as an Assertable.
+func (_ GrpcWebAssertion) IsAssertable() {}
+
+// HeadersAssertion is the assertion struct for Headers.
+type HeadersAssertion struct {
+	CustomRequestHeaders              assert.Opt[map[string]string]
+	CustomResponseHeaders             assert.Opt[map[string]string]
+	AccessControlAllowCredentials     assert.Opt[bool]
+	AccessControlAllowHeaders         assert.Opt[[]string]
+	AccessControlAllowMethods         assert.Opt[[]string]
+	AccessControlAllowOriginList      assert.Opt[[]string]
+	AccessControlAllowOriginListRegex assert.Opt[[]string]
+	AccessControlExposeHeaders        assert.Opt[[]string]
+	AccessControlMaxAge               assert.Opt[*int64]
+	AddVaryHeader                     assert.Opt[bool]
+	AllowedHosts                      assert.Opt[[]string]
+	HostsProxyHeaders                 assert.Opt[[]string]
+	SSLProxyHeaders                   assert.Opt[map[string]string]
+	STSSeconds                        assert.Opt[*int64]
+	STSIncludeSubdomains              assert.Opt[bool]
+	STSPreload                        assert.Opt[bool]
+	ForceSTSHeader                    assert.Opt[bool]
+	FrameDeny                         assert.Opt[bool]
+	CustomFrameOptionsValue           assert.Opt[string]
+	ContentTypeNosniff                assert.Opt[bool]
+	BrowserXSSFilter                  assert.Opt[bool]
+	CustomBrowserXSSValue             assert.Opt[string]
+	ContentSecurityPolicy             assert.Opt[string]
+	ContentSecurityPolicyReportOnly   assert.Opt[string]
+	PublicKey                         assert.Opt[string]
+	ReferrerPolicy                    assert.Opt[string]
+	PermissionsPolicy                 assert.Opt[string]
+	IsDevelopment                     assert.Opt[bool]
+	FeaturePolicy                     assert.Opt[*string]
+	SSLRedirect                       assert.Opt[*bool]
+	SSLTemporaryRedirect              assert.Opt[*bool]
+	SSLHost                           assert.Opt[*string]
+	SSLForceHost                      assert.Opt[*bool]
+}
+
+// IsAssertable marks HeadersAssertion as an Assertable.
+func (_ HeadersAssertion) IsAssertable() {}
+
+// HighestRandomWeightAssertion is the assertion struct for HighestRandomWeight.
+type HighestRandomWeightAssertion struct {
+	Services assert.Opt[[]ServiceAssertion]
+}
+
+// IsAssertable marks HighestRandomWeightAssertion as an Assertable.
+func (_ HighestRandomWeightAssertion) IsAssertable() {}
+
+// IPStrategyAssertion is the assertion struct for IPStrategy.
+type IPStrategyAssertion struct {
+	Depth       assert.Opt[int]
+	ExcludedIPs assert.Opt[[]string]
+	IPv6Subnet  assert.Opt[*int]
+}
+
+// IsAssertable marks IPStrategyAssertion as an Assertable.
+func (_ IPStrategyAssertion) IsAssertable() {}
+
+// InFlightReqAssertion is the assertion struct for InFlightReq.
+type InFlightReqAssertion struct {
+	Amount          assert.Opt[int64]
+	SourceCriterion SourceCriterionAssertion
+}
+
+// IsAssertable marks InFlightReqAssertion as an Assertable.
+func (_ InFlightReqAssertion) IsAssertable() {}
+
 // IngressRouteAssertion is the assertion struct for IngressRoute.
 type IngressRouteAssertion struct {
 	TypeMeta   assert.Opt[v1.TypeMeta]
@@ -140,11 +289,21 @@ type IngressRouteAssertion struct {
 // IsAssertable marks IngressRouteAssertion as an Assertable.
 func (_ IngressRouteAssertion) IsAssertable() {}
 
+// IngressRouteRefAssertion is the assertion struct for IngressRouteRef.
+type IngressRouteRefAssertion struct {
+	Name      assert.Opt[string]
+	Namespace assert.Opt[string]
+}
+
+// IsAssertable marks IngressRouteRefAssertion as an Assertable.
+func (_ IngressRouteRefAssertion) IsAssertable() {}
+
 // IngressRouteSpecAssertion is the assertion struct for IngressRouteSpec.
 type IngressRouteSpecAssertion struct {
 	Routes      assert.Opt[[]RouteAssertion]
 	EntryPoints assert.Opt[[]string]
 	TLS         TLSAssertion
+	ParentRefs  assert.Opt[[]IngressRouteRefAssertion]
 }
 
 // IsAssertable marks IngressRouteSpecAssertion as an Assertable.
@@ -194,10 +353,10 @@ type LoadBalancerSpecAssertion struct {
 	Name               assert.Opt[string]
 	Kind               assert.Opt[string]
 	Namespace          assert.Opt[string]
-	Sticky             assert.Opt[*dynamic.Sticky]
+	Sticky             StickyAssertion
 	Port               assert.Opt[intstr.IntOrString]
 	Scheme             assert.Opt[string]
-	Strategy           assert.Opt[string]
+	Strategy           assert.Opt[v1alpha1.BalancerStrategy]
 	PassHostHeader     assert.Opt[*bool]
 	ResponseForwarding ResponseForwardingAssertion
 	ServersTransport   assert.Opt[string]
@@ -205,6 +364,7 @@ type LoadBalancerSpecAssertion struct {
 	NativeLB           assert.Opt[*bool]
 	NodePortLB         assert.Opt[bool]
 	HealthCheck        ServerHealthCheckAssertion
+	PassiveHealthCheck PassiveServerHealthCheckAssertion
 }
 
 // IsAssertable marks LoadBalancerSpecAssertion as an Assertable.
@@ -231,30 +391,30 @@ func (_ MiddlewareRefAssertion) IsAssertable() {}
 
 // MiddlewareSpecAssertion is the assertion struct for MiddlewareSpec.
 type MiddlewareSpecAssertion struct {
-	AddPrefix         assert.Opt[*dynamic.AddPrefix]
-	StripPrefix       assert.Opt[*dynamic.StripPrefix]
-	StripPrefixRegex  assert.Opt[*dynamic.StripPrefixRegex]
-	ReplacePath       assert.Opt[*dynamic.ReplacePath]
-	ReplacePathRegex  assert.Opt[*dynamic.ReplacePathRegex]
+	AddPrefix         AddPrefixAssertion
+	StripPrefix       StripPrefixAssertion
+	StripPrefixRegex  StripPrefixRegexAssertion
+	ReplacePath       ReplacePathAssertion
+	ReplacePathRegex  ReplacePathRegexAssertion
 	Chain             ChainAssertion
-	IPWhiteList       assert.Opt[*dynamic.IPWhiteList]
-	IPAllowList       assert.Opt[*dynamic.IPAllowList]
-	Headers           assert.Opt[*dynamic.Headers]
+	IPWhiteList       assert.Opt[*v1alpha1.IPWhiteList]
+	IPAllowList       assert.Opt[*v1alpha1.IPAllowList]
+	Headers           HeadersAssertion
 	Errors            ErrorPageAssertion
 	RateLimit         RateLimitAssertion
-	RedirectRegex     assert.Opt[*dynamic.RedirectRegex]
-	RedirectScheme    assert.Opt[*dynamic.RedirectScheme]
+	RedirectRegex     RedirectRegexAssertion
+	RedirectScheme    RedirectSchemeAssertion
 	BasicAuth         BasicAuthAssertion
 	DigestAuth        DigestAuthAssertion
 	ForwardAuth       ForwardAuthAssertion
-	InFlightReq       assert.Opt[*dynamic.InFlightReq]
-	Buffering         assert.Opt[*dynamic.Buffering]
+	InFlightReq       InFlightReqAssertion
+	Buffering         BufferingAssertion
 	CircuitBreaker    CircuitBreakerAssertion
 	Compress          CompressAssertion
-	PassTLSClientCert assert.Opt[*dynamic.PassTLSClientCert]
+	PassTLSClientCert PassTLSClientCertAssertion
 	Retry             RetryAssertion
-	ContentType       assert.Opt[*dynamic.ContentType]
-	GrpcWeb           assert.Opt[*dynamic.GrpcWeb]
+	ContentType       ContentTypeAssertion
+	GrpcWeb           GrpcWebAssertion
 	Plugin            assert.Opt[map[string]v11.JSON]
 }
 
@@ -273,9 +433,9 @@ func (_ MiddlewareTCPAssertion) IsAssertable() {}
 
 // MiddlewareTCPSpecAssertion is the assertion struct for MiddlewareTCPSpec.
 type MiddlewareTCPSpecAssertion struct {
-	InFlightConn assert.Opt[*dynamic.TCPInFlightConn]
-	IPWhiteList  assert.Opt[*dynamic.TCPIPWhiteList]
-	IPAllowList  assert.Opt[*dynamic.TCPIPAllowList]
+	InFlightConn TCPInFlightConnAssertion
+	IPWhiteList  assert.Opt[*v1alpha1.TCPIPWhiteList]
+	IPAllowList  assert.Opt[*v1alpha1.TCPIPAllowList]
 }
 
 // IsAssertable marks MiddlewareTCPSpecAssertion as an Assertable.
@@ -310,16 +470,98 @@ type ObjectReferenceAssertion struct {
 // IsAssertable marks ObjectReferenceAssertion as an Assertable.
 func (_ ObjectReferenceAssertion) IsAssertable() {}
 
+// PassTLSClientCertAssertion is the assertion struct for PassTLSClientCert.
+type PassTLSClientCertAssertion struct {
+	PEM  assert.Opt[bool]
+	Info TLSClientCertificateInfoAssertion
+}
+
+// IsAssertable marks PassTLSClientCertAssertion as an Assertable.
+func (_ PassTLSClientCertAssertion) IsAssertable() {}
+
+// PassiveServerHealthCheckAssertion is the assertion struct for PassiveServerHealthCheck.
+type PassiveServerHealthCheckAssertion struct {
+	FailureWindow     assert.Opt[*intstr.IntOrString]
+	MaxFailedAttempts assert.Opt[*int]
+}
+
+// IsAssertable marks PassiveServerHealthCheckAssertion as an Assertable.
+func (_ PassiveServerHealthCheckAssertion) IsAssertable() {}
+
+// ProxyProtocolAssertion is the assertion struct for ProxyProtocol.
+type ProxyProtocolAssertion struct {
+	Version assert.Opt[int]
+}
+
+// IsAssertable marks ProxyProtocolAssertion as an Assertable.
+func (_ ProxyProtocolAssertion) IsAssertable() {}
+
 // RateLimitAssertion is the assertion struct for RateLimit.
 type RateLimitAssertion struct {
 	Average         assert.Opt[*int64]
 	Period          assert.Opt[*intstr.IntOrString]
 	Burst           assert.Opt[*int64]
-	SourceCriterion assert.Opt[*dynamic.SourceCriterion]
+	SourceCriterion SourceCriterionAssertion
+	Redis           RedisAssertion
 }
 
 // IsAssertable marks RateLimitAssertion as an Assertable.
 func (_ RateLimitAssertion) IsAssertable() {}
+
+// RedirectRegexAssertion is the assertion struct for RedirectRegex.
+type RedirectRegexAssertion struct {
+	Regex       assert.Opt[string]
+	Replacement assert.Opt[string]
+	Permanent   assert.Opt[bool]
+}
+
+// IsAssertable marks RedirectRegexAssertion as an Assertable.
+func (_ RedirectRegexAssertion) IsAssertable() {}
+
+// RedirectSchemeAssertion is the assertion struct for RedirectScheme.
+type RedirectSchemeAssertion struct {
+	Scheme                 assert.Opt[string]
+	Port                   assert.Opt[string]
+	Permanent              assert.Opt[bool]
+	ForcePermanentRedirect assert.Opt[bool]
+}
+
+// IsAssertable marks RedirectSchemeAssertion as an Assertable.
+func (_ RedirectSchemeAssertion) IsAssertable() {}
+
+// RedisAssertion is the assertion struct for Redis.
+type RedisAssertion struct {
+	Endpoints      assert.Opt[[]string]
+	TLS            ClientTLSAssertion
+	Secret         assert.Opt[string]
+	DB             assert.Opt[int]
+	PoolSize       assert.Opt[int]
+	MinIdleConns   assert.Opt[int]
+	MaxActiveConns assert.Opt[int]
+	ReadTimeout    assert.Opt[*intstr.IntOrString]
+	WriteTimeout   assert.Opt[*intstr.IntOrString]
+	DialTimeout    assert.Opt[*intstr.IntOrString]
+}
+
+// IsAssertable marks RedisAssertion as an Assertable.
+func (_ RedisAssertion) IsAssertable() {}
+
+// ReplacePathAssertion is the assertion struct for ReplacePath.
+type ReplacePathAssertion struct {
+	Path assert.Opt[string]
+}
+
+// IsAssertable marks ReplacePathAssertion as an Assertable.
+func (_ ReplacePathAssertion) IsAssertable() {}
+
+// ReplacePathRegexAssertion is the assertion struct for ReplacePathRegex.
+type ReplacePathRegexAssertion struct {
+	Regex       assert.Opt[string]
+	Replacement assert.Opt[string]
+}
+
+// IsAssertable marks ReplacePathRegexAssertion as an Assertable.
+func (_ ReplacePathRegexAssertion) IsAssertable() {}
 
 // ResponseForwardingAssertion is the assertion struct for ResponseForwarding.
 type ResponseForwardingAssertion struct {
@@ -338,14 +580,24 @@ type RetryAssertion struct {
 // IsAssertable marks RetryAssertion as an Assertable.
 func (_ RetryAssertion) IsAssertable() {}
 
+// RootCAAssertion is the assertion struct for RootCA.
+type RootCAAssertion struct {
+	Secret    assert.Opt[*string]
+	ConfigMap assert.Opt[*string]
+}
+
+// IsAssertable marks RootCAAssertion as an Assertable.
+func (_ RootCAAssertion) IsAssertable() {}
+
 // RouteAssertion is the assertion struct for Route.
 type RouteAssertion struct {
-	Match       assert.Opt[string]
-	Kind        assert.Opt[string]
-	Priority    assert.Opt[int]
-	Syntax      assert.Opt[string]
-	Services    assert.Opt[[]ServiceAssertion]
-	Middlewares assert.Opt[[]MiddlewareRefAssertion]
+	Match         assert.Opt[string]
+	Kind          assert.Opt[string]
+	Priority      assert.Opt[int]
+	Syntax        assert.Opt[string]
+	Services      assert.Opt[[]ServiceAssertion]
+	Middlewares   assert.Opt[[]MiddlewareRefAssertion]
+	Observability RouterObservabilityConfigAssertion
 }
 
 // IsAssertable marks RouteAssertion as an Assertable.
@@ -371,6 +623,17 @@ type RouteUDPAssertion struct {
 // IsAssertable marks RouteUDPAssertion as an Assertable.
 func (_ RouteUDPAssertion) IsAssertable() {}
 
+// RouterObservabilityConfigAssertion is the assertion struct for RouterObservabilityConfig.
+type RouterObservabilityConfigAssertion struct {
+	AccessLogs     assert.Opt[*bool]
+	Metrics        assert.Opt[*bool]
+	Tracing        assert.Opt[*bool]
+	TraceVerbosity assert.Opt[v1alpha1.TracingVerbosity]
+}
+
+// IsAssertable marks RouterObservabilityConfigAssertion as an Assertable.
+func (_ RouterObservabilityConfigAssertion) IsAssertable() {}
+
 // SchemeGroupVersionAssertion is the assertion struct for GroupVersion.
 type SchemeGroupVersionAssertion struct {
 	Group   assert.Opt[string]
@@ -382,17 +645,18 @@ func (_ SchemeGroupVersionAssertion) IsAssertable() {}
 
 // ServerHealthCheckAssertion is the assertion struct for ServerHealthCheck.
 type ServerHealthCheckAssertion struct {
-	Scheme          assert.Opt[string]
-	Mode            assert.Opt[string]
-	Path            assert.Opt[string]
-	Method          assert.Opt[string]
-	Status          assert.Opt[int]
-	Port            assert.Opt[int]
-	Interval        assert.Opt[*intstr.IntOrString]
-	Timeout         assert.Opt[*intstr.IntOrString]
-	Hostname        assert.Opt[string]
-	FollowRedirects assert.Opt[*bool]
-	Headers         assert.Opt[map[string]string]
+	Scheme            assert.Opt[string]
+	Mode              assert.Opt[string]
+	Path              assert.Opt[string]
+	Method            assert.Opt[string]
+	Status            assert.Opt[int]
+	Port              assert.Opt[int]
+	Interval          assert.Opt[*intstr.IntOrString]
+	UnhealthyInterval assert.Opt[*intstr.IntOrString]
+	Timeout           assert.Opt[*intstr.IntOrString]
+	Hostname          assert.Opt[string]
+	FollowRedirects   assert.Opt[*bool]
+	Headers           assert.Opt[map[string]string]
 }
 
 // IsAssertable marks ServerHealthCheckAssertion as an Assertable.
@@ -412,13 +676,14 @@ func (_ ServersTransportAssertion) IsAssertable() {}
 type ServersTransportSpecAssertion struct {
 	ServerName          assert.Opt[string]
 	InsecureSkipVerify  assert.Opt[bool]
+	RootCAs             assert.Opt[[]RootCAAssertion]
 	RootCAsSecrets      assert.Opt[[]string]
 	CertificatesSecrets assert.Opt[[]string]
 	MaxIdleConnsPerHost assert.Opt[int]
 	ForwardingTimeouts  ForwardingTimeoutsAssertion
 	DisableHTTP2        assert.Opt[bool]
 	PeerCertURI         assert.Opt[string]
-	Spiffe              assert.Opt[*dynamic.Spiffe]
+	Spiffe              SpiffeAssertion
 }
 
 // IsAssertable marks ServersTransportSpecAssertion as an Assertable.
@@ -438,6 +703,7 @@ func (_ ServersTransportTCPAssertion) IsAssertable() {}
 type ServersTransportTCPSpecAssertion struct {
 	DialTimeout      assert.Opt[*intstr.IntOrString]
 	DialKeepAlive    assert.Opt[*intstr.IntOrString]
+	ProxyProtocol    ProxyProtocolAssertion
 	TerminationDelay assert.Opt[*intstr.IntOrString]
 	TLS              TLSClientConfigAssertion
 }
@@ -460,7 +726,7 @@ type ServiceTCPAssertion struct {
 	Port             assert.Opt[intstr.IntOrString]
 	Weight           assert.Opt[*int]
 	TerminationDelay assert.Opt[*int]
-	ProxyProtocol    assert.Opt[*dynamic.ProxyProtocol]
+	ProxyProtocol    ProxyProtocolAssertion
 	ServersTransport assert.Opt[string]
 	TLS              assert.Opt[bool]
 	NativeLB         assert.Opt[*bool]
@@ -483,26 +749,121 @@ type ServiceUDPAssertion struct {
 // IsAssertable marks ServiceUDPAssertion as an Assertable.
 func (_ ServiceUDPAssertion) IsAssertable() {}
 
+// SourceCriterionAssertion is the assertion struct for SourceCriterion.
+type SourceCriterionAssertion struct {
+	IPStrategy        IPStrategyAssertion
+	RequestHeaderName assert.Opt[string]
+	RequestHost       assert.Opt[bool]
+}
+
+// IsAssertable marks SourceCriterionAssertion as an Assertable.
+func (_ SourceCriterionAssertion) IsAssertable() {}
+
+// SpiffeAssertion is the assertion struct for Spiffe.
+type SpiffeAssertion struct {
+	IDs         assert.Opt[[]string]
+	TrustDomain assert.Opt[string]
+}
+
+// IsAssertable marks SpiffeAssertion as an Assertable.
+func (_ SpiffeAssertion) IsAssertable() {}
+
+// StickyAssertion is the assertion struct for Sticky.
+type StickyAssertion struct {
+	Cookie CookieAssertion
+}
+
+// IsAssertable marks StickyAssertion as an Assertable.
+func (_ StickyAssertion) IsAssertable() {}
+
+// StripPrefixAssertion is the assertion struct for StripPrefix.
+type StripPrefixAssertion struct {
+	Prefixes   assert.Opt[[]string]
+	ForceSlash assert.Opt[*bool]
+}
+
+// IsAssertable marks StripPrefixAssertion as an Assertable.
+func (_ StripPrefixAssertion) IsAssertable() {}
+
+// StripPrefixRegexAssertion is the assertion struct for StripPrefixRegex.
+type StripPrefixRegexAssertion struct {
+	Regex assert.Opt[[]string]
+}
+
+// IsAssertable marks StripPrefixRegexAssertion as an Assertable.
+func (_ StripPrefixRegexAssertion) IsAssertable() {}
+
+// TCPInFlightConnAssertion is the assertion struct for TCPInFlightConn.
+type TCPInFlightConnAssertion struct {
+	Amount assert.Opt[int64]
+}
+
+// IsAssertable marks TCPInFlightConnAssertion as an Assertable.
+func (_ TCPInFlightConnAssertion) IsAssertable() {}
+
 // TLSAssertion is the assertion struct for TLS.
 type TLSAssertion struct {
 	SecretName   assert.Opt[string]
 	Options      TLSOptionRefAssertion
 	Store        TLSStoreRefAssertion
 	CertResolver assert.Opt[string]
-	Domains      assert.Opt[[]types.Domain]
+	Domains      assert.Opt[[]DomainAssertion]
 }
 
 // IsAssertable marks TLSAssertion as an Assertable.
 func (_ TLSAssertion) IsAssertable() {}
 
+// TLSClientCertificateInfoAssertion is the assertion struct for TLSClientCertificateInfo.
+type TLSClientCertificateInfoAssertion struct {
+	NotAfter     assert.Opt[bool]
+	NotBefore    assert.Opt[bool]
+	Sans         assert.Opt[bool]
+	SerialNumber assert.Opt[bool]
+	Subject      TLSClientCertificateSubjectDNInfoAssertion
+	Issuer       TLSClientCertificateIssuerDNInfoAssertion
+}
+
+// IsAssertable marks TLSClientCertificateInfoAssertion as an Assertable.
+func (_ TLSClientCertificateInfoAssertion) IsAssertable() {}
+
+// TLSClientCertificateIssuerDNInfoAssertion is the assertion struct for TLSClientCertificateIssuerDNInfo.
+type TLSClientCertificateIssuerDNInfoAssertion struct {
+	Country         assert.Opt[bool]
+	Province        assert.Opt[bool]
+	Locality        assert.Opt[bool]
+	Organization    assert.Opt[bool]
+	CommonName      assert.Opt[bool]
+	SerialNumber    assert.Opt[bool]
+	DomainComponent assert.Opt[bool]
+}
+
+// IsAssertable marks TLSClientCertificateIssuerDNInfoAssertion as an Assertable.
+func (_ TLSClientCertificateIssuerDNInfoAssertion) IsAssertable() {}
+
+// TLSClientCertificateSubjectDNInfoAssertion is the assertion struct for TLSClientCertificateSubjectDNInfo.
+type TLSClientCertificateSubjectDNInfoAssertion struct {
+	Country            assert.Opt[bool]
+	Province           assert.Opt[bool]
+	Locality           assert.Opt[bool]
+	Organization       assert.Opt[bool]
+	OrganizationalUnit assert.Opt[bool]
+	CommonName         assert.Opt[bool]
+	SerialNumber       assert.Opt[bool]
+	DomainComponent    assert.Opt[bool]
+}
+
+// IsAssertable marks TLSClientCertificateSubjectDNInfoAssertion as an Assertable.
+func (_ TLSClientCertificateSubjectDNInfoAssertion) IsAssertable() {}
+
 // TLSClientConfigAssertion is the assertion struct for TLSClientConfig.
 type TLSClientConfigAssertion struct {
 	ServerName          assert.Opt[string]
 	InsecureSkipVerify  assert.Opt[bool]
+	RootCAs             assert.Opt[[]RootCAAssertion]
 	RootCAsSecrets      assert.Opt[[]string]
 	CertificatesSecrets assert.Opt[[]string]
 	PeerCertURI         assert.Opt[string]
-	Spiffe              assert.Opt[*dynamic.Spiffe]
+	Spiffe              SpiffeAssertion
 }
 
 // IsAssertable marks TLSClientConfigAssertion as an Assertable.
@@ -536,6 +897,7 @@ type TLSOptionSpecAssertion struct {
 	ClientAuth               ClientAuthAssertion
 	SniStrict                assert.Opt[bool]
 	ALPNProtocols            assert.Opt[[]string]
+	DisableSessionTickets    assert.Opt[bool]
 	PreferServerCipherSuites assert.Opt[*bool]
 }
 
@@ -564,7 +926,7 @@ func (_ TLSStoreRefAssertion) IsAssertable() {}
 // TLSStoreSpecAssertion is the assertion struct for TLSStoreSpec.
 type TLSStoreSpecAssertion struct {
 	DefaultCertificate   CertificateAssertion
-	DefaultGeneratedCert assert.Opt[*tls.GeneratedCert]
+	DefaultGeneratedCert GeneratedCertAssertion
 	Certificates         assert.Opt[[]CertificateAssertion]
 }
 
@@ -578,7 +940,7 @@ type TLSTCPAssertion struct {
 	Options      ObjectReferenceAssertion
 	Store        ObjectReferenceAssertion
 	CertResolver assert.Opt[string]
-	Domains      assert.Opt[[]types.Domain]
+	Domains      assert.Opt[[]DomainAssertion]
 }
 
 // IsAssertable marks TLSTCPAssertion as an Assertable.
@@ -596,8 +958,9 @@ func (_ TraefikServiceAssertion) IsAssertable() {}
 
 // TraefikServiceSpecAssertion is the assertion struct for TraefikServiceSpec.
 type TraefikServiceSpecAssertion struct {
-	Weighted  WeightedRoundRobinAssertion
-	Mirroring MirroringAssertion
+	Weighted            WeightedRoundRobinAssertion
+	Mirroring           MirroringAssertion
+	HighestRandomWeight HighestRandomWeightAssertion
 }
 
 // IsAssertable marks TraefikServiceSpecAssertion as an Assertable.
@@ -606,7 +969,7 @@ func (_ TraefikServiceSpecAssertion) IsAssertable() {}
 // WeightedRoundRobinAssertion is the assertion struct for WeightedRoundRobin.
 type WeightedRoundRobinAssertion struct {
 	Services assert.Opt[[]ServiceAssertion]
-	Sticky   assert.Opt[*dynamic.Sticky]
+	Sticky   StickyAssertion
 }
 
 // IsAssertable marks WeightedRoundRobinAssertion as an Assertable.

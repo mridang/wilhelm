@@ -48,15 +48,15 @@ metadata doesn't break the assertion.
 
 ## Repo layout
 
-| Module                                             | Role                                                                                                                                                          |
-| -------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| [`github.com/mridang/wilhelm`](.)                  | Core engine + generators + core K8s assertion catalogue                                                                                                       |
-| [`assert/`](assert)                                | `Partial`, `Opt[T]`, `Some`, `SomePtr`, `Matching`, `Ptr`, `Assertable`, plus 500+ generated assertion structs (core K8s + Gateway API + Prometheus Operator) |
-| [`env/`](env)                                      | `Env` + `NewEnv(cfg, ns)`, 138 typed resource types (`GetX` / `GetXE` per type = 276 methods), type-switching `AssertPartial` / `AssertNone`                  |
-| [`internal/gen/assertgen`](internal/gen/assertgen) | Generator: emits assertion struct catalogues                                                                                                                  |
-| [`internal/gen/envgen`](internal/gen/envgen)       | Generator: emits typed clientset getters or dynamic-client CRD getters (`-mode clientset` / `-mode crd`)                                                      |
-| [`internal/anchors`](internal/anchors)             | Blank-import anchor for generator-scanned packages                                                                                                            |
-| `assert/<family>/<v>`, `env/<family>/<v>`          | Per-CRD subpackages (separate Go modules)                                                                                                                     |
+| Module                                    | Role                                                                                                                                                          |
+| ----------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [`github.com/mridang/wilhelm`](.)         | Core engine + generators + core K8s assertion catalogue                                                                                                       |
+| [`assert/`](assert)                       | `Partial`, `Opt[T]`, `Some`, `SomePtr`, `Matching`, `Ptr`, `Assertable`, plus 500+ generated assertion structs (core K8s + Gateway API + Prometheus Operator) |
+| [`env/`](env)                             | `Env` + `NewEnv(cfg, ns)`, 138 typed resource types (`GetX` / `GetXE` per type = 276 methods), type-switching `AssertPartial` / `AssertNone`                  |
+| `assert/<family>/<v>`, `env/<family>/<v>` | Per-CRD subpackages (separate Go modules)                                                                                                                     |
+
+Generated files are committed; the generators live under `internal/gen` and only need
+running when an upstream version changes (`make generate-all`).
 
 The repo is a Go multi-module monorepo. The CRD subpackages each declare
 their own `go.mod`, so a downstream consumer only pulls the operator

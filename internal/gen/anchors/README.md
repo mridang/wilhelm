@@ -1,4 +1,4 @@
-# `internal/anchors`
+# `internal/gen/anchors`
 
 Bootstrap-only package. Holds blank imports for every Go package that
 wilhelm's code generators introspect, so `go.mod` keeps those modules
