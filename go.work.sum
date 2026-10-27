@@ -827,6 +827,7 @@ github.com/mridang/wilhelm/assert/tekton/pipeline v1.0.0/go.mod h1:VnqaBDz5rAGFy
 github.com/mridang/wilhelm/assert/tekton/pipeline v1.1.1/go.mod h1:bvwTjq4YmIzJdOUCkElRsStl0IIsLolYwt2qbQy7ZYA=
 github.com/mridang/wilhelm/assert/tekton/pipeline v1.1.2/go.mod h1:tdeO2V5nZlvFiA8kWBsl1aFAbDma/2yAodwHlAfPLdk=
 github.com/mridang/wilhelm/assert/tekton/pipeline v1.1.4/go.mod h1:SAXWUFu+Pt8tpKSOOJNyW82/If1FmiGO+4I6qgSWbDk=
+github.com/mridang/wilhelm/assert/tekton/pipeline v1.1.6/go.mod h1:kAO5cUn3STVMZEzuj5RpxZvYWpKNJ+GKVSN2A043cOE=
 github.com/mridang/wilhelm/assert/traefik/io v1.0.0/go.mod h1:La4VGOu+K8jaIqAGlFP028OK5OtgxUrtEIuYK4eDrJI=
 github.com/mridang/wilhelm/assert/traefik/io v1.1.1/go.mod h1:LtNYNBCF6GU+nSFJiRAELv53J0v27AX4eVS5fH0HDD8=
 github.com/mridang/wilhelm/assert/traefik/io v1.1.2/go.mod h1:ls5MkvI8I+iUwvikPRy8EcK45DIG/xlbAyrQGlqZSCk=

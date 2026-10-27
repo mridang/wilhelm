@@ -6,7 +6,7 @@ require (
 	github.com/fluxcd/helm-controller/api v1.5.5
 	github.com/fluxcd/pkg/apis/kustomize v1.15.1
 	github.com/fluxcd/pkg/apis/meta v1.25.1
-	github.com/mridang/wilhelm v1.1.6
+	github.com/mridang/wilhelm v1.1.7
 	k8s.io/apiextensions-apiserver v0.35.4
 	k8s.io/apimachinery v0.36.1
 )
