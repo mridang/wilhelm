@@ -666,7 +666,7 @@ func copyLicense(cfg config) error {
 		if err != nil {
 			continue
 		}
-		return os.WriteFile( //nolint:gosec // fixed name inside the generator output directory
+		return os.WriteFile( //nolint:gosec,nolintlint // fixed name inside the generator output directory
 			filepath.Join(cfg.out, "LICENSE"), body, filePerm)
 	}
 	return fmt.Errorf("no license file found in %s", cfg.srcDir)
