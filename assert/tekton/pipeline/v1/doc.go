@@ -4,5 +4,5 @@
 //
 //	go generate ./...
 //
-//go:generate go run github.com/mridang/wilhelm/internal/gen/assertgen -packages github.com/tektoncd/pipeline/pkg/apis/pipeline/v1 -out zz_generated.go -package v1 -engine-pkg github.com/mridang/wilhelm/assert
+//go:generate go run github.com/mridang/wilhelm/internal/gen/assertgen -packages github.com/mridang/wilhelm/assert/tekton/pipeline/crd/v1 -out zz_generated.go -package v1 -engine-pkg github.com/mridang/wilhelm/assert
 package v1

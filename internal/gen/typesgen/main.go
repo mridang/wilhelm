@@ -46,6 +46,10 @@ type config struct {
 	srcDir  string
 	entry   string
 	out     string
+	// typesOnly copies just the types of the entry package instead of the
+	// whole package, for entry packages whose functions pull in more of the
+	// upstream module than the types are worth.
+	typesOnly bool
 }
 
 func main() {
@@ -55,6 +59,8 @@ func main() {
 	flag.StringVar(&cfg.srcDir, "src", "", "use this local checkout instead of downloading the module")
 	flag.StringVar(&cfg.entry, "entry", "", "entry package, relative to the module root")
 	flag.StringVar(&cfg.out, "out", "", "output directory; becomes one package")
+	flag.BoolVar(&cfg.typesOnly, "types-only", false,
+		"copy only the types of the entry package, not its functions")
 	flag.Parse()
 
 	if cfg.module == "" || cfg.entry == "" || cfg.out == "" {
@@ -161,11 +167,7 @@ func run(cfg config) error {
 	if err != nil {
 		return err
 	}
-	for _, f := range entry.files {
-		for _, r := range moduleRefs(cfg, f) {
-			g.need(r)
-		}
-	}
+	g.seed(entry)
 	if err = g.resolve(); err != nil {
 		return err
 	}
@@ -173,6 +175,22 @@ func run(cfg config) error {
 		return err
 	}
 	return copyLicense(cfg)
+}
+
+// seed queues what the entry package needs: every module-internal reference
+// of its files, or just all of its types in types-only mode.
+func (g *generator) seed(entry *pkgSource) {
+	if g.cfg.typesOnly {
+		for name := range entry.types {
+			g.need(ref{entry.rel, name})
+		}
+		return
+	}
+	for _, f := range entry.files {
+		for _, r := range moduleRefs(g.cfg, f) {
+			g.need(r)
+		}
+	}
 }
 
 func (g *generator) load(rel string) (*pkgSource, error) {
@@ -418,6 +436,9 @@ func (g *generator) emit(entry *pkgSource) error {
 	if err := g.checkCollisions(entry); err != nil {
 		return err
 	}
+	if g.cfg.typesOnly {
+		return g.emitExtracted(entry)
+	}
 	for name, f := range entry.files {
 		flatten(g.cfg, entry.fset, f)
 		var buf bytes.Buffer
@@ -432,28 +453,50 @@ func (g *generator) emit(entry *pkgSource) error {
 	return g.emitExtracted(entry)
 }
 
-// checkCollisions fails when two packages contribute a type of the same name,
-// because flattening would merge them.
+// checkCollisions fails when two packages contribute a different type of the
+// same name, because flattening would merge them. A name declared identically
+// in both is kept once, from the package that comes first.
 func (g *generator) checkCollisions(entry *pkgSource) error {
 	owner := map[string]string{}
-	for name := range entry.types {
-		owner[name] = entry.rel
+	if !g.cfg.typesOnly {
+		for name := range entry.types {
+			owner[name] = entry.rel
+		}
 	}
 	for _, rel := range g.sortedRels() {
 		for name := range g.needed[rel] {
-			if prev, taken := owner[name]; taken {
+			prev, taken := owner[name]
+			if !taken {
+				owner[name] = rel
+				continue
+			}
+			if !g.sameType(prev, rel, name) {
 				return fmt.Errorf("type %s exists in both %s and %s", name, prev, rel)
 			}
-			owner[name] = rel
+			delete(g.needed[rel], name)
 		}
 	}
 	return nil
 }
 
+// sameType reports whether name is declared identically in both packages.
+func (g *generator) sameType(a, b, name string) bool {
+	pa, pb := g.pkgs[a], g.pkgs[b]
+	return pa != nil && pb != nil && render(pa, name) == render(pb, name)
+}
+
+func render(p *pkgSource, name string) string {
+	var buf bytes.Buffer
+	if err := printer.Fprint(&buf, p.fset, p.types[name].spec); err != nil {
+		return ""
+	}
+	return buf.String()
+}
+
 func (g *generator) sortedRels() []string {
 	rels := make([]string, 0, len(g.needed))
 	for rel := range g.needed {
-		if rel != g.cfg.entry {
+		if rel != g.cfg.entry || g.cfg.typesOnly {
 			rels = append(rels, rel)
 		}
 	}
