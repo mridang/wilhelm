@@ -3,7 +3,6 @@
 package v1alpha1
 
 import (
-	dynamic "github.com/mridang/wilhelm/assert/traefik/io/upstream/config/dynamic"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/util/intstr"
 )
@@ -51,7 +50,7 @@ type ServersTransportSpec struct {
 	// PeerCertURI defines the peer cert URI used to match against SAN URI during the peer certificate verification.
 	PeerCertURI string `json:"peerCertURI,omitempty"`
 	// Spiffe defines the SPIFFE configuration.
-	Spiffe *dynamic.Spiffe `json:"spiffe,omitempty"`
+	Spiffe *Spiffe `json:"spiffe,omitempty"`
 }
 
 // +k8s:deepcopy-gen=true

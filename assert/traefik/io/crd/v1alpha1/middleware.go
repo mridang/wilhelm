@@ -3,7 +3,6 @@
 package v1alpha1
 
 import (
-	dynamic "github.com/mridang/wilhelm/assert/traefik/io/upstream/config/dynamic"
 	apiextensionv1 "k8s.io/apiextensions-apiserver/pkg/apis/apiextensions/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/util/intstr"
@@ -28,31 +27,31 @@ type Middleware struct {
 
 // MiddlewareSpec defines the desired state of a Middleware.
 type MiddlewareSpec struct {
-	AddPrefix        *dynamic.AddPrefix        `json:"addPrefix,omitempty"`
-	StripPrefix      *dynamic.StripPrefix      `json:"stripPrefix,omitempty"`
-	StripPrefixRegex *dynamic.StripPrefixRegex `json:"stripPrefixRegex,omitempty"`
-	ReplacePath      *dynamic.ReplacePath      `json:"replacePath,omitempty"`
-	ReplacePathRegex *dynamic.ReplacePathRegex `json:"replacePathRegex,omitempty"`
-	Chain            *Chain                    `json:"chain,omitempty"`
+	AddPrefix        *AddPrefix        `json:"addPrefix,omitempty"`
+	StripPrefix      *StripPrefix      `json:"stripPrefix,omitempty"`
+	StripPrefixRegex *StripPrefixRegex `json:"stripPrefixRegex,omitempty"`
+	ReplacePath      *ReplacePath      `json:"replacePath,omitempty"`
+	ReplacePathRegex *ReplacePathRegex `json:"replacePathRegex,omitempty"`
+	Chain            *Chain            `json:"chain,omitempty"`
 	// Deprecated: please use IPAllowList instead.
-	IPWhiteList       *dynamic.IPWhiteList       `json:"ipWhiteList,omitempty"`
-	IPAllowList       *dynamic.IPAllowList       `json:"ipAllowList,omitempty"`
-	Headers           *dynamic.Headers           `json:"headers,omitempty"`
-	Errors            *ErrorPage                 `json:"errors,omitempty"`
-	RateLimit         *RateLimit                 `json:"rateLimit,omitempty"`
-	RedirectRegex     *dynamic.RedirectRegex     `json:"redirectRegex,omitempty"`
-	RedirectScheme    *dynamic.RedirectScheme    `json:"redirectScheme,omitempty"`
-	BasicAuth         *BasicAuth                 `json:"basicAuth,omitempty"`
-	DigestAuth        *DigestAuth                `json:"digestAuth,omitempty"`
-	ForwardAuth       *ForwardAuth               `json:"forwardAuth,omitempty"`
-	InFlightReq       *dynamic.InFlightReq       `json:"inFlightReq,omitempty"`
-	Buffering         *dynamic.Buffering         `json:"buffering,omitempty"`
-	CircuitBreaker    *CircuitBreaker            `json:"circuitBreaker,omitempty"`
-	Compress          *Compress                  `json:"compress,omitempty"`
-	PassTLSClientCert *dynamic.PassTLSClientCert `json:"passTLSClientCert,omitempty"`
-	Retry             *Retry                     `json:"retry,omitempty"`
-	ContentType       *dynamic.ContentType       `json:"contentType,omitempty"`
-	GrpcWeb           *dynamic.GrpcWeb           `json:"grpcWeb,omitempty"`
+	IPWhiteList       *IPWhiteList       `json:"ipWhiteList,omitempty"`
+	IPAllowList       *IPAllowList       `json:"ipAllowList,omitempty"`
+	Headers           *Headers           `json:"headers,omitempty"`
+	Errors            *ErrorPage         `json:"errors,omitempty"`
+	RateLimit         *RateLimit         `json:"rateLimit,omitempty"`
+	RedirectRegex     *RedirectRegex     `json:"redirectRegex,omitempty"`
+	RedirectScheme    *RedirectScheme    `json:"redirectScheme,omitempty"`
+	BasicAuth         *BasicAuth         `json:"basicAuth,omitempty"`
+	DigestAuth        *DigestAuth        `json:"digestAuth,omitempty"`
+	ForwardAuth       *ForwardAuth       `json:"forwardAuth,omitempty"`
+	InFlightReq       *InFlightReq       `json:"inFlightReq,omitempty"`
+	Buffering         *Buffering         `json:"buffering,omitempty"`
+	CircuitBreaker    *CircuitBreaker    `json:"circuitBreaker,omitempty"`
+	Compress          *Compress          `json:"compress,omitempty"`
+	PassTLSClientCert *PassTLSClientCert `json:"passTLSClientCert,omitempty"`
+	Retry             *Retry             `json:"retry,omitempty"`
+	ContentType       *ContentType       `json:"contentType,omitempty"`
+	GrpcWeb           *GrpcWeb           `json:"grpcWeb,omitempty"`
 	// Plugin defines the middleware plugin configuration.
 	// More info: https://doc.traefik.io/traefik/v3.6/reference/routing-configuration/http/middlewares/overview/#community-middlewares
 	Plugin map[string]apiextensionv1.JSON `json:"plugin,omitempty"`
@@ -230,7 +229,7 @@ type RateLimit struct {
 	// SourceCriterion defines what criterion is used to group requests as originating from a common source.
 	// If several strategies are defined at the same time, an error will be raised.
 	// If none are set, the default is to use the request's remote address field (as an ipStrategy).
-	SourceCriterion *dynamic.SourceCriterion `json:"sourceCriterion,omitempty"`
+	SourceCriterion *SourceCriterion `json:"sourceCriterion,omitempty"`
 	// Redis hold the configs of Redis as bucket in rate limiter.
 	Redis *Redis `json:"redis,omitempty"`
 }

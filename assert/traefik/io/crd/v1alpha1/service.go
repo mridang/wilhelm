@@ -3,7 +3,6 @@
 package v1alpha1
 
 import (
-	dynamic "github.com/mridang/wilhelm/assert/traefik/io/upstream/config/dynamic"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
@@ -88,7 +87,7 @@ type WeightedRoundRobin struct {
 	Services []Service `json:"services,omitempty"`
 	// Sticky defines whether sticky sessions are enabled.
 	// More info: https://doc.traefik.io/traefik/v3.6/reference/routing-configuration/kubernetes/crd/http/traefikservice/#stickiness-and-load-balancing
-	Sticky *dynamic.Sticky `json:"sticky,omitempty"`
+	Sticky *Sticky `json:"sticky,omitempty"`
 }
 
 // +k8s:deepcopy-gen=true

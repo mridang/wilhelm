@@ -3,8 +3,6 @@
 package v1alpha1
 
 import (
-	dynamic "github.com/mridang/wilhelm/assert/traefik/io/upstream/config/dynamic"
-	types "github.com/mridang/wilhelm/assert/traefik/io/upstream/types"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/util/intstr"
 )
@@ -54,7 +52,7 @@ type Route struct {
 	Middlewares []MiddlewareRef `json:"middlewares,omitempty"`
 	// Observability defines the observability configuration for a router.
 	// More info: https://doc.traefik.io/traefik/v3.6/reference/routing-configuration/http/routing/observability/
-	Observability *dynamic.RouterObservabilityConfig `json:"observability,omitempty"`
+	Observability *RouterObservabilityConfig `json:"observability,omitempty"`
 }
 
 // TLS holds the TLS configuration.
@@ -75,7 +73,7 @@ type TLS struct {
 	CertResolver string `json:"certResolver,omitempty"`
 	// Domains defines the list of domains that will be used to issue certificates.
 	// More info: https://doc.traefik.io/traefik/v3.6/reference/routing-configuration/http/tls/tls-certificates/#domains
-	Domains []types.Domain `json:"domains,omitempty"`
+	Domains []Domain `json:"domains,omitempty"`
 }
 
 // TLSOptionRef is a reference to a TLSOption resource.
@@ -112,7 +110,7 @@ type LoadBalancerSpec struct {
 	Namespace string `json:"namespace,omitempty"`
 	// Sticky defines the sticky sessions configuration.
 	// More info: https://doc.traefik.io/traefik/v3.6/reference/routing-configuration/http/load-balancing/service/#sticky-sessions
-	Sticky *dynamic.Sticky `json:"sticky,omitempty"`
+	Sticky *Sticky `json:"sticky,omitempty"`
 	// Port defines the port of a Kubernetes Service.
 	// This can be a reference to a named port.
 	// +kubebuilder:validation:XIntOrString
@@ -125,7 +123,7 @@ type LoadBalancerSpec struct {
 	// RoundRobin value is deprecated and supported for backward compatibility.
 	// TODO: when the deprecated RoundRobin value will be removed, set the default kubebuilder value to wrr.
 	// +kubebuilder:validation:Enum=wrr;p2c;hrw;leasttime;RoundRobin
-	Strategy dynamic.BalancerStrategy `json:"strategy,omitempty"`
+	Strategy BalancerStrategy `json:"strategy,omitempty"`
 	// PassHostHeader defines whether the client Host header is forwarded to the upstream Kubernetes Service.
 	// By default, passHostHeader is true.
 	PassHostHeader *bool `json:"passHostHeader,omitempty"`

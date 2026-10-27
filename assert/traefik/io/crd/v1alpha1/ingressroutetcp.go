@@ -3,8 +3,6 @@
 package v1alpha1
 
 import (
-	dynamic "github.com/mridang/wilhelm/assert/traefik/io/upstream/config/dynamic"
-	types "github.com/mridang/wilhelm/assert/traefik/io/upstream/types"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/util/intstr"
 )
@@ -64,7 +62,7 @@ type TLSTCP struct {
 	CertResolver string `json:"certResolver,omitempty"`
 	// Domains defines the list of domains that will be used to issue certificates.
 	// More info: https://doc.traefik.io/traefik/v3.6/reference/routing-configuration/tcp/tls/#domains
-	Domains []types.Domain `json:"domains,omitempty"`
+	Domains []Domain `json:"domains,omitempty"`
 }
 
 // ServiceTCP defines an upstream TCP service to proxy traffic to.
@@ -92,7 +90,7 @@ type ServiceTCP struct {
 	// More info: https://doc.traefik.io/traefik/v3.6/reference/routing-configuration/tcp/service/#proxy-protocol
 	//
 	// Deprecated: ProxyProtocol will not be supported in future APIVersions, please use ServersTransport to configure ProxyProtocol instead.
-	ProxyProtocol *dynamic.ProxyProtocol `json:"proxyProtocol,omitempty"`
+	ProxyProtocol *ProxyProtocol `json:"proxyProtocol,omitempty"`
 	// ServersTransport defines the name of ServersTransportTCP resource to use.
 	// It allows to configure the transport between Traefik and your servers.
 	// Can only be used on a Kubernetes Service.

@@ -3,7 +3,6 @@
 package v1alpha1
 
 import (
-	tls "github.com/mridang/wilhelm/assert/traefik/io/upstream/tls"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
@@ -32,7 +31,7 @@ type TLSStoreSpec struct {
 	DefaultCertificate *Certificate `json:"defaultCertificate,omitempty"`
 
 	// DefaultGeneratedCert defines the default generated certificate configuration.
-	DefaultGeneratedCert *tls.GeneratedCert `json:"defaultGeneratedCert,omitempty"`
+	DefaultGeneratedCert *GeneratedCert `json:"defaultGeneratedCert,omitempty"`
 
 	// Certificates is a list of secret names, each secret holding a key/certificate pair to add to the store.
 	Certificates []Certificate `json:"certificates,omitempty"`

@@ -3,7 +3,6 @@
 package v1alpha1
 
 import (
-	dynamic "github.com/mridang/wilhelm/assert/traefik/io/upstream/config/dynamic"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
@@ -26,17 +25,17 @@ type MiddlewareTCP struct {
 // MiddlewareTCPSpec defines the desired state of a MiddlewareTCP.
 type MiddlewareTCPSpec struct {
 	// InFlightConn defines the InFlightConn middleware configuration.
-	InFlightConn *dynamic.TCPInFlightConn `json:"inFlightConn,omitempty"`
+	InFlightConn *TCPInFlightConn `json:"inFlightConn,omitempty"`
 	// IPWhiteList defines the IPWhiteList middleware configuration.
 	// This middleware accepts/refuses connections based on the client IP.
 	// More info: https://doc.traefik.io/traefik/v3.6/reference/routing-configuration/tcp/middlewares/ipwhitelist/
 	//
 	// Deprecated: please use IPAllowList instead.
-	IPWhiteList *dynamic.TCPIPWhiteList `json:"ipWhiteList,omitempty"`
+	IPWhiteList *TCPIPWhiteList `json:"ipWhiteList,omitempty"`
 	// IPAllowList defines the IPAllowList middleware configuration.
 	// This middleware accepts/refuses connections based on the client IP.
 	// More info: https://doc.traefik.io/traefik/v3.6/reference/routing-configuration/tcp/middlewares/ipallowlist/
-	IPAllowList *dynamic.TCPIPAllowList `json:"ipAllowList,omitempty"`
+	IPAllowList *TCPIPAllowList `json:"ipAllowList,omitempty"`
 }
 
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object

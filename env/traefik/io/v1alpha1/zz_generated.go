@@ -5,7 +5,7 @@ package v1alpha1
 import (
 	"fmt"
 	assert "github.com/mridang/wilhelm/assert"
-	v1alpha1 "github.com/mridang/wilhelm/assert/traefik/io/upstream/provider/kubernetes/crd/traefikio/v1alpha1"
+	v1alpha1 "github.com/mridang/wilhelm/assert/traefik/io/crd/v1alpha1"
 	v1alpha11 "github.com/mridang/wilhelm/assert/traefik/io/v1alpha1"
 	env "github.com/mridang/wilhelm/env"
 	require "github.com/stretchr/testify/require"

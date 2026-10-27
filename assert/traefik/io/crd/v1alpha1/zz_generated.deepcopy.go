@@ -32,9 +32,6 @@ THE SOFTWARE.
 package v1alpha1
 
 import (
-	dynamic "github.com/mridang/wilhelm/assert/traefik/io/upstream/config/dynamic"
-	tls "github.com/mridang/wilhelm/assert/traefik/io/upstream/tls"
-	types "github.com/mridang/wilhelm/assert/traefik/io/upstream/types"
 	v1 "k8s.io/apiextensions-apiserver/pkg/apis/apiextensions/v1"
 	runtime "k8s.io/apimachinery/pkg/runtime"
 	intstr "k8s.io/apimachinery/pkg/util/intstr"
@@ -689,7 +686,7 @@ func (in *LoadBalancerSpec) DeepCopyInto(out *LoadBalancerSpec) {
 	*out = *in
 	if in.Sticky != nil {
 		in, out := &in.Sticky, &out.Sticky
-		*out = new(dynamic.Sticky)
+		*out = new(Sticky)
 		(*in).DeepCopyInto(*out)
 	}
 	out.Port = in.Port
@@ -817,27 +814,27 @@ func (in *MiddlewareSpec) DeepCopyInto(out *MiddlewareSpec) {
 	*out = *in
 	if in.AddPrefix != nil {
 		in, out := &in.AddPrefix, &out.AddPrefix
-		*out = new(dynamic.AddPrefix)
+		*out = new(AddPrefix)
 		**out = **in
 	}
 	if in.StripPrefix != nil {
 		in, out := &in.StripPrefix, &out.StripPrefix
-		*out = new(dynamic.StripPrefix)
+		*out = new(StripPrefix)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.StripPrefixRegex != nil {
 		in, out := &in.StripPrefixRegex, &out.StripPrefixRegex
-		*out = new(dynamic.StripPrefixRegex)
+		*out = new(StripPrefixRegex)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.ReplacePath != nil {
 		in, out := &in.ReplacePath, &out.ReplacePath
-		*out = new(dynamic.ReplacePath)
+		*out = new(ReplacePath)
 		**out = **in
 	}
 	if in.ReplacePathRegex != nil {
 		in, out := &in.ReplacePathRegex, &out.ReplacePathRegex
-		*out = new(dynamic.ReplacePathRegex)
+		*out = new(ReplacePathRegex)
 		**out = **in
 	}
 	if in.Chain != nil {
@@ -847,17 +844,17 @@ func (in *MiddlewareSpec) DeepCopyInto(out *MiddlewareSpec) {
 	}
 	if in.IPWhiteList != nil {
 		in, out := &in.IPWhiteList, &out.IPWhiteList
-		*out = new(dynamic.IPWhiteList)
+		*out = new(IPWhiteList)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.IPAllowList != nil {
 		in, out := &in.IPAllowList, &out.IPAllowList
-		*out = new(dynamic.IPAllowList)
+		*out = new(IPAllowList)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.Headers != nil {
 		in, out := &in.Headers, &out.Headers
-		*out = new(dynamic.Headers)
+		*out = new(Headers)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.Errors != nil {
@@ -872,12 +869,12 @@ func (in *MiddlewareSpec) DeepCopyInto(out *MiddlewareSpec) {
 	}
 	if in.RedirectRegex != nil {
 		in, out := &in.RedirectRegex, &out.RedirectRegex
-		*out = new(dynamic.RedirectRegex)
+		*out = new(RedirectRegex)
 		**out = **in
 	}
 	if in.RedirectScheme != nil {
 		in, out := &in.RedirectScheme, &out.RedirectScheme
-		*out = new(dynamic.RedirectScheme)
+		*out = new(RedirectScheme)
 		**out = **in
 	}
 	if in.BasicAuth != nil {
@@ -897,12 +894,12 @@ func (in *MiddlewareSpec) DeepCopyInto(out *MiddlewareSpec) {
 	}
 	if in.InFlightReq != nil {
 		in, out := &in.InFlightReq, &out.InFlightReq
-		*out = new(dynamic.InFlightReq)
+		*out = new(InFlightReq)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.Buffering != nil {
 		in, out := &in.Buffering, &out.Buffering
-		*out = new(dynamic.Buffering)
+		*out = new(Buffering)
 		**out = **in
 	}
 	if in.CircuitBreaker != nil {
@@ -917,7 +914,7 @@ func (in *MiddlewareSpec) DeepCopyInto(out *MiddlewareSpec) {
 	}
 	if in.PassTLSClientCert != nil {
 		in, out := &in.PassTLSClientCert, &out.PassTLSClientCert
-		*out = new(dynamic.PassTLSClientCert)
+		*out = new(PassTLSClientCert)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.Retry != nil {
@@ -927,12 +924,12 @@ func (in *MiddlewareSpec) DeepCopyInto(out *MiddlewareSpec) {
 	}
 	if in.ContentType != nil {
 		in, out := &in.ContentType, &out.ContentType
-		*out = new(dynamic.ContentType)
+		*out = new(ContentType)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.GrpcWeb != nil {
 		in, out := &in.GrpcWeb, &out.GrpcWeb
-		*out = new(dynamic.GrpcWeb)
+		*out = new(GrpcWeb)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.Plugin != nil {
@@ -1020,17 +1017,17 @@ func (in *MiddlewareTCPSpec) DeepCopyInto(out *MiddlewareTCPSpec) {
 	*out = *in
 	if in.InFlightConn != nil {
 		in, out := &in.InFlightConn, &out.InFlightConn
-		*out = new(dynamic.TCPInFlightConn)
+		*out = new(TCPInFlightConn)
 		**out = **in
 	}
 	if in.IPWhiteList != nil {
 		in, out := &in.IPWhiteList, &out.IPWhiteList
-		*out = new(dynamic.TCPIPWhiteList)
+		*out = new(TCPIPWhiteList)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.IPAllowList != nil {
 		in, out := &in.IPAllowList, &out.IPAllowList
-		*out = new(dynamic.TCPIPAllowList)
+		*out = new(TCPIPAllowList)
 		(*in).DeepCopyInto(*out)
 	}
 	return
@@ -1159,7 +1156,7 @@ func (in *RateLimit) DeepCopyInto(out *RateLimit) {
 	}
 	if in.SourceCriterion != nil {
 		in, out := &in.SourceCriterion, &out.SourceCriterion
-		*out = new(dynamic.SourceCriterion)
+		*out = new(SourceCriterion)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.Redis != nil {
@@ -1297,7 +1294,7 @@ func (in *Route) DeepCopyInto(out *Route) {
 	}
 	if in.Observability != nil {
 		in, out := &in.Observability, &out.Observability
-		*out = new(dynamic.RouterObservabilityConfig)
+		*out = new(RouterObservabilityConfig)
 		(*in).DeepCopyInto(*out)
 	}
 	return
@@ -1494,7 +1491,7 @@ func (in *ServersTransportSpec) DeepCopyInto(out *ServersTransportSpec) {
 	}
 	if in.Spiffe != nil {
 		in, out := &in.Spiffe, &out.Spiffe
-		*out = new(dynamic.Spiffe)
+		*out = new(Spiffe)
 		(*in).DeepCopyInto(*out)
 	}
 	return
@@ -1585,7 +1582,7 @@ func (in *ServersTransportTCPSpec) DeepCopyInto(out *ServersTransportTCPSpec) {
 	}
 	if in.ProxyProtocol != nil {
 		in, out := &in.ProxyProtocol, &out.ProxyProtocol
-		*out = new(dynamic.ProxyProtocol)
+		*out = new(ProxyProtocol)
 		**out = **in
 	}
 	if in.TerminationDelay != nil {
@@ -1644,7 +1641,7 @@ func (in *ServiceTCP) DeepCopyInto(out *ServiceTCP) {
 	}
 	if in.ProxyProtocol != nil {
 		in, out := &in.ProxyProtocol, &out.ProxyProtocol
-		*out = new(dynamic.ProxyProtocol)
+		*out = new(ProxyProtocol)
 		**out = **in
 	}
 	if in.NativeLB != nil {
@@ -1707,7 +1704,7 @@ func (in *TLS) DeepCopyInto(out *TLS) {
 	}
 	if in.Domains != nil {
 		in, out := &in.Domains, &out.Domains
-		*out = make([]types.Domain, len(*in))
+		*out = make([]Domain, len(*in))
 		for i := range *in {
 			(*in)[i].DeepCopyInto(&(*out)[i])
 		}
@@ -1747,7 +1744,7 @@ func (in *TLSClientConfig) DeepCopyInto(out *TLSClientConfig) {
 	}
 	if in.Spiffe != nil {
 		in, out := &in.Spiffe, &out.Spiffe
-		*out = new(dynamic.Spiffe)
+		*out = new(Spiffe)
 		(*in).DeepCopyInto(*out)
 	}
 	return
@@ -1962,7 +1959,7 @@ func (in *TLSStoreSpec) DeepCopyInto(out *TLSStoreSpec) {
 	}
 	if in.DefaultGeneratedCert != nil {
 		in, out := &in.DefaultGeneratedCert, &out.DefaultGeneratedCert
-		*out = new(tls.GeneratedCert)
+		*out = new(GeneratedCert)
 		(*in).DeepCopyInto(*out)
 	}
 	if in.Certificates != nil {
@@ -1998,7 +1995,7 @@ func (in *TLSTCP) DeepCopyInto(out *TLSTCP) {
 	}
 	if in.Domains != nil {
 		in, out := &in.Domains, &out.Domains
-		*out = make([]types.Domain, len(*in))
+		*out = make([]Domain, len(*in))
 		for i := range *in {
 			(*in)[i].DeepCopyInto(&(*out)[i])
 		}
@@ -2119,7 +2116,7 @@ func (in *WeightedRoundRobin) DeepCopyInto(out *WeightedRoundRobin) {
 	}
 	if in.Sticky != nil {
 		in, out := &in.Sticky, &out.Sticky
-		*out = new(dynamic.Sticky)
+		*out = new(Sticky)
 		(*in).DeepCopyInto(*out)
 	}
 	return
