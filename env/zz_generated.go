@@ -8,9 +8,7 @@ import (
 	v119 "github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring/v1"
 	require "github.com/stretchr/testify/require"
 	v1 "k8s.io/api/admissionregistration/v1"
-	v1alpha1 "k8s.io/api/admissionregistration/v1alpha1"
 	v1beta1 "k8s.io/api/admissionregistration/v1beta1"
-	v1alpha12 "k8s.io/api/apiserverinternal/v1alpha1"
 	v12 "k8s.io/api/apps/v1"
 	v1beta11 "k8s.io/api/apps/v1beta1"
 	v1beta2 "k8s.io/api/apps/v1beta2"
@@ -19,10 +17,8 @@ import (
 	v14 "k8s.io/api/batch/v1"
 	v1beta12 "k8s.io/api/batch/v1beta1"
 	v15 "k8s.io/api/certificates/v1"
-	v1alpha11 "k8s.io/api/certificates/v1alpha1"
 	v1beta13 "k8s.io/api/certificates/v1beta1"
 	v16 "k8s.io/api/coordination/v1"
-	v1alpha2 "k8s.io/api/coordination/v1alpha2"
 	v1beta14 "k8s.io/api/coordination/v1beta1"
 	v17 "k8s.io/api/core/v1"
 	v18 "k8s.io/api/discovery/v1"
@@ -37,22 +33,17 @@ import (
 	v111 "k8s.io/api/networking/v1"
 	v1beta19 "k8s.io/api/networking/v1beta1"
 	v112 "k8s.io/api/node/v1"
-	v1alpha13 "k8s.io/api/node/v1alpha1"
 	v1beta110 "k8s.io/api/node/v1beta1"
 	v113 "k8s.io/api/policy/v1"
 	v1beta111 "k8s.io/api/policy/v1beta1"
 	v114 "k8s.io/api/rbac/v1"
-	v1alpha14 "k8s.io/api/rbac/v1alpha1"
 	v1beta112 "k8s.io/api/rbac/v1beta1"
 	v115 "k8s.io/api/resource/v1"
-	v1alpha3 "k8s.io/api/resource/v1alpha3"
 	v1beta113 "k8s.io/api/resource/v1beta1"
 	v1beta22 "k8s.io/api/resource/v1beta2"
 	v116 "k8s.io/api/scheduling/v1"
-	v1alpha21 "k8s.io/api/scheduling/v1alpha2"
 	v1beta114 "k8s.io/api/scheduling/v1beta1"
 	v117 "k8s.io/api/storage/v1"
-	v1alpha15 "k8s.io/api/storage/v1alpha1"
 	v1beta115 "k8s.io/api/storage/v1beta1"
 	v1beta116 "k8s.io/api/storagemigration/v1beta1"
 	errors "k8s.io/apimachinery/pkg/api/errors"
@@ -145,62 +136,6 @@ func (env *Env) GetValidatingWebhookConfiguration(t *testing.T, name string) *v1
 func (env *Env) GetValidatingWebhookConfigurationE(t *testing.T, name string) (*v1.ValidatingWebhookConfiguration, error) {
 	t.Helper()
 	return env.Client.AdmissionregistrationV1().ValidatingWebhookConfigurations().Get(env.Ctx, name, v11.GetOptions{})
-}
-
-// GetAdmissionregistrationV1alpha1MutatingAdmissionPolicy fetches a AdmissionregistrationV1alpha1MutatingAdmissionPolicy by name, failing the test on error.
-func (env *Env) GetAdmissionregistrationV1alpha1MutatingAdmissionPolicy(t *testing.T, name string) *v1alpha1.MutatingAdmissionPolicy {
-	t.Helper()
-	obj, err := env.Client.AdmissionregistrationV1alpha1().MutatingAdmissionPolicies().Get(env.Ctx, name, v11.GetOptions{})
-	require.NoError(t, err, "failed to get AdmissionregistrationV1alpha1MutatingAdmissionPolicy %s", name)
-	return obj
-}
-
-// GetAdmissionregistrationV1alpha1MutatingAdmissionPolicyE fetches a AdmissionregistrationV1alpha1MutatingAdmissionPolicy by name, returning the error for non-existence checks.
-func (env *Env) GetAdmissionregistrationV1alpha1MutatingAdmissionPolicyE(t *testing.T, name string) (*v1alpha1.MutatingAdmissionPolicy, error) {
-	t.Helper()
-	return env.Client.AdmissionregistrationV1alpha1().MutatingAdmissionPolicies().Get(env.Ctx, name, v11.GetOptions{})
-}
-
-// GetAdmissionregistrationV1alpha1MutatingAdmissionPolicyBinding fetches a AdmissionregistrationV1alpha1MutatingAdmissionPolicyBinding by name, failing the test on error.
-func (env *Env) GetAdmissionregistrationV1alpha1MutatingAdmissionPolicyBinding(t *testing.T, name string) *v1alpha1.MutatingAdmissionPolicyBinding {
-	t.Helper()
-	obj, err := env.Client.AdmissionregistrationV1alpha1().MutatingAdmissionPolicyBindings().Get(env.Ctx, name, v11.GetOptions{})
-	require.NoError(t, err, "failed to get AdmissionregistrationV1alpha1MutatingAdmissionPolicyBinding %s", name)
-	return obj
-}
-
-// GetAdmissionregistrationV1alpha1MutatingAdmissionPolicyBindingE fetches a AdmissionregistrationV1alpha1MutatingAdmissionPolicyBinding by name, returning the error for non-existence checks.
-func (env *Env) GetAdmissionregistrationV1alpha1MutatingAdmissionPolicyBindingE(t *testing.T, name string) (*v1alpha1.MutatingAdmissionPolicyBinding, error) {
-	t.Helper()
-	return env.Client.AdmissionregistrationV1alpha1().MutatingAdmissionPolicyBindings().Get(env.Ctx, name, v11.GetOptions{})
-}
-
-// GetAdmissionregistrationV1alpha1ValidatingAdmissionPolicy fetches a AdmissionregistrationV1alpha1ValidatingAdmissionPolicy by name, failing the test on error.
-func (env *Env) GetAdmissionregistrationV1alpha1ValidatingAdmissionPolicy(t *testing.T, name string) *v1alpha1.ValidatingAdmissionPolicy {
-	t.Helper()
-	obj, err := env.Client.AdmissionregistrationV1alpha1().ValidatingAdmissionPolicies().Get(env.Ctx, name, v11.GetOptions{})
-	require.NoError(t, err, "failed to get AdmissionregistrationV1alpha1ValidatingAdmissionPolicy %s", name)
-	return obj
-}
-
-// GetAdmissionregistrationV1alpha1ValidatingAdmissionPolicyE fetches a AdmissionregistrationV1alpha1ValidatingAdmissionPolicy by name, returning the error for non-existence checks.
-func (env *Env) GetAdmissionregistrationV1alpha1ValidatingAdmissionPolicyE(t *testing.T, name string) (*v1alpha1.ValidatingAdmissionPolicy, error) {
-	t.Helper()
-	return env.Client.AdmissionregistrationV1alpha1().ValidatingAdmissionPolicies().Get(env.Ctx, name, v11.GetOptions{})
-}
-
-// GetAdmissionregistrationV1alpha1ValidatingAdmissionPolicyBinding fetches a AdmissionregistrationV1alpha1ValidatingAdmissionPolicyBinding by name, failing the test on error.
-func (env *Env) GetAdmissionregistrationV1alpha1ValidatingAdmissionPolicyBinding(t *testing.T, name string) *v1alpha1.ValidatingAdmissionPolicyBinding {
-	t.Helper()
-	obj, err := env.Client.AdmissionregistrationV1alpha1().ValidatingAdmissionPolicyBindings().Get(env.Ctx, name, v11.GetOptions{})
-	require.NoError(t, err, "failed to get AdmissionregistrationV1alpha1ValidatingAdmissionPolicyBinding %s", name)
-	return obj
-}
-
-// GetAdmissionregistrationV1alpha1ValidatingAdmissionPolicyBindingE fetches a AdmissionregistrationV1alpha1ValidatingAdmissionPolicyBinding by name, returning the error for non-existence checks.
-func (env *Env) GetAdmissionregistrationV1alpha1ValidatingAdmissionPolicyBindingE(t *testing.T, name string) (*v1alpha1.ValidatingAdmissionPolicyBinding, error) {
-	t.Helper()
-	return env.Client.AdmissionregistrationV1alpha1().ValidatingAdmissionPolicyBindings().Get(env.Ctx, name, v11.GetOptions{})
 }
 
 // GetAdmissionregistrationV1beta1MutatingAdmissionPolicy fetches a AdmissionregistrationV1beta1MutatingAdmissionPolicy by name, failing the test on error.
@@ -553,20 +488,6 @@ func (env *Env) GetCertificateSigningRequestE(t *testing.T, name string) (*v15.C
 	return env.Client.CertificatesV1().CertificateSigningRequests().Get(env.Ctx, name, v11.GetOptions{})
 }
 
-// GetCertificatesV1alpha1ClusterTrustBundle fetches a CertificatesV1alpha1ClusterTrustBundle by name, failing the test on error.
-func (env *Env) GetCertificatesV1alpha1ClusterTrustBundle(t *testing.T, name string) *v1alpha11.ClusterTrustBundle {
-	t.Helper()
-	obj, err := env.Client.CertificatesV1alpha1().ClusterTrustBundles().Get(env.Ctx, name, v11.GetOptions{})
-	require.NoError(t, err, "failed to get CertificatesV1alpha1ClusterTrustBundle %s", name)
-	return obj
-}
-
-// GetCertificatesV1alpha1ClusterTrustBundleE fetches a CertificatesV1alpha1ClusterTrustBundle by name, returning the error for non-existence checks.
-func (env *Env) GetCertificatesV1alpha1ClusterTrustBundleE(t *testing.T, name string) (*v1alpha11.ClusterTrustBundle, error) {
-	t.Helper()
-	return env.Client.CertificatesV1alpha1().ClusterTrustBundles().Get(env.Ctx, name, v11.GetOptions{})
-}
-
 // GetCertificatesV1beta1CertificateSigningRequest fetches a CertificatesV1beta1CertificateSigningRequest by name, failing the test on error.
 func (env *Env) GetCertificatesV1beta1CertificateSigningRequest(t *testing.T, name string) *v1beta13.CertificateSigningRequest {
 	t.Helper()
@@ -621,20 +542,6 @@ func (env *Env) GetLease(t *testing.T, name string) *v16.Lease {
 func (env *Env) GetLeaseE(t *testing.T, name string) (*v16.Lease, error) {
 	t.Helper()
 	return env.Client.CoordinationV1().Leases(env.Namespace).Get(env.Ctx, name, v11.GetOptions{})
-}
-
-// GetCoordinationV1alpha2LeaseCandidate fetches a CoordinationV1alpha2LeaseCandidate by name, failing the test on error.
-func (env *Env) GetCoordinationV1alpha2LeaseCandidate(t *testing.T, name string) *v1alpha2.LeaseCandidate {
-	t.Helper()
-	obj, err := env.Client.CoordinationV1alpha2().LeaseCandidates(env.Namespace).Get(env.Ctx, name, v11.GetOptions{})
-	require.NoError(t, err, "failed to get CoordinationV1alpha2LeaseCandidate %s", name)
-	return obj
-}
-
-// GetCoordinationV1alpha2LeaseCandidateE fetches a CoordinationV1alpha2LeaseCandidate by name, returning the error for non-existence checks.
-func (env *Env) GetCoordinationV1alpha2LeaseCandidateE(t *testing.T, name string) (*v1alpha2.LeaseCandidate, error) {
-	t.Helper()
-	return env.Client.CoordinationV1alpha2().LeaseCandidates(env.Namespace).Get(env.Ctx, name, v11.GetOptions{})
 }
 
 // GetCoordinationV1beta1Lease fetches a CoordinationV1beta1Lease by name, failing the test on error.
@@ -1127,20 +1034,6 @@ func (env *Env) GetFlowcontrolV1beta3PriorityLevelConfigurationE(t *testing.T, n
 	return env.Client.FlowcontrolV1beta3().PriorityLevelConfigurations().Get(env.Ctx, name, v11.GetOptions{})
 }
 
-// GetStorageVersion fetches a StorageVersion by name, failing the test on error.
-func (env *Env) GetStorageVersion(t *testing.T, name string) *v1alpha12.StorageVersion {
-	t.Helper()
-	obj, err := env.Client.InternalV1alpha1().StorageVersions().Get(env.Ctx, name, v11.GetOptions{})
-	require.NoError(t, err, "failed to get StorageVersion %s", name)
-	return obj
-}
-
-// GetStorageVersionE fetches a StorageVersion by name, returning the error for non-existence checks.
-func (env *Env) GetStorageVersionE(t *testing.T, name string) (*v1alpha12.StorageVersion, error) {
-	t.Helper()
-	return env.Client.InternalV1alpha1().StorageVersions().Get(env.Ctx, name, v11.GetOptions{})
-}
-
 // GetIPAddress fetches a IPAddress by name, failing the test on error.
 func (env *Env) GetIPAddress(t *testing.T, name string) *v111.IPAddress {
 	t.Helper()
@@ -1281,20 +1174,6 @@ func (env *Env) GetRuntimeClassE(t *testing.T, name string) (*v112.RuntimeClass,
 	return env.Client.NodeV1().RuntimeClasses().Get(env.Ctx, name, v11.GetOptions{})
 }
 
-// GetNodeV1alpha1RuntimeClass fetches a NodeV1alpha1RuntimeClass by name, failing the test on error.
-func (env *Env) GetNodeV1alpha1RuntimeClass(t *testing.T, name string) *v1alpha13.RuntimeClass {
-	t.Helper()
-	obj, err := env.Client.NodeV1alpha1().RuntimeClasses().Get(env.Ctx, name, v11.GetOptions{})
-	require.NoError(t, err, "failed to get NodeV1alpha1RuntimeClass %s", name)
-	return obj
-}
-
-// GetNodeV1alpha1RuntimeClassE fetches a NodeV1alpha1RuntimeClass by name, returning the error for non-existence checks.
-func (env *Env) GetNodeV1alpha1RuntimeClassE(t *testing.T, name string) (*v1alpha13.RuntimeClass, error) {
-	t.Helper()
-	return env.Client.NodeV1alpha1().RuntimeClasses().Get(env.Ctx, name, v11.GetOptions{})
-}
-
 // GetNodeV1beta1RuntimeClass fetches a NodeV1beta1RuntimeClass by name, failing the test on error.
 func (env *Env) GetNodeV1beta1RuntimeClass(t *testing.T, name string) *v1beta110.RuntimeClass {
 	t.Helper()
@@ -1391,62 +1270,6 @@ func (env *Env) GetRoleBinding(t *testing.T, name string) *v114.RoleBinding {
 func (env *Env) GetRoleBindingE(t *testing.T, name string) (*v114.RoleBinding, error) {
 	t.Helper()
 	return env.Client.RbacV1().RoleBindings(env.Namespace).Get(env.Ctx, name, v11.GetOptions{})
-}
-
-// GetRbacV1alpha1ClusterRole fetches a RbacV1alpha1ClusterRole by name, failing the test on error.
-func (env *Env) GetRbacV1alpha1ClusterRole(t *testing.T, name string) *v1alpha14.ClusterRole {
-	t.Helper()
-	obj, err := env.Client.RbacV1alpha1().ClusterRoles().Get(env.Ctx, name, v11.GetOptions{})
-	require.NoError(t, err, "failed to get RbacV1alpha1ClusterRole %s", name)
-	return obj
-}
-
-// GetRbacV1alpha1ClusterRoleE fetches a RbacV1alpha1ClusterRole by name, returning the error for non-existence checks.
-func (env *Env) GetRbacV1alpha1ClusterRoleE(t *testing.T, name string) (*v1alpha14.ClusterRole, error) {
-	t.Helper()
-	return env.Client.RbacV1alpha1().ClusterRoles().Get(env.Ctx, name, v11.GetOptions{})
-}
-
-// GetRbacV1alpha1ClusterRoleBinding fetches a RbacV1alpha1ClusterRoleBinding by name, failing the test on error.
-func (env *Env) GetRbacV1alpha1ClusterRoleBinding(t *testing.T, name string) *v1alpha14.ClusterRoleBinding {
-	t.Helper()
-	obj, err := env.Client.RbacV1alpha1().ClusterRoleBindings().Get(env.Ctx, name, v11.GetOptions{})
-	require.NoError(t, err, "failed to get RbacV1alpha1ClusterRoleBinding %s", name)
-	return obj
-}
-
-// GetRbacV1alpha1ClusterRoleBindingE fetches a RbacV1alpha1ClusterRoleBinding by name, returning the error for non-existence checks.
-func (env *Env) GetRbacV1alpha1ClusterRoleBindingE(t *testing.T, name string) (*v1alpha14.ClusterRoleBinding, error) {
-	t.Helper()
-	return env.Client.RbacV1alpha1().ClusterRoleBindings().Get(env.Ctx, name, v11.GetOptions{})
-}
-
-// GetRbacV1alpha1Role fetches a RbacV1alpha1Role by name, failing the test on error.
-func (env *Env) GetRbacV1alpha1Role(t *testing.T, name string) *v1alpha14.Role {
-	t.Helper()
-	obj, err := env.Client.RbacV1alpha1().Roles(env.Namespace).Get(env.Ctx, name, v11.GetOptions{})
-	require.NoError(t, err, "failed to get RbacV1alpha1Role %s", name)
-	return obj
-}
-
-// GetRbacV1alpha1RoleE fetches a RbacV1alpha1Role by name, returning the error for non-existence checks.
-func (env *Env) GetRbacV1alpha1RoleE(t *testing.T, name string) (*v1alpha14.Role, error) {
-	t.Helper()
-	return env.Client.RbacV1alpha1().Roles(env.Namespace).Get(env.Ctx, name, v11.GetOptions{})
-}
-
-// GetRbacV1alpha1RoleBinding fetches a RbacV1alpha1RoleBinding by name, failing the test on error.
-func (env *Env) GetRbacV1alpha1RoleBinding(t *testing.T, name string) *v1alpha14.RoleBinding {
-	t.Helper()
-	obj, err := env.Client.RbacV1alpha1().RoleBindings(env.Namespace).Get(env.Ctx, name, v11.GetOptions{})
-	require.NoError(t, err, "failed to get RbacV1alpha1RoleBinding %s", name)
-	return obj
-}
-
-// GetRbacV1alpha1RoleBindingE fetches a RbacV1alpha1RoleBinding by name, returning the error for non-existence checks.
-func (env *Env) GetRbacV1alpha1RoleBindingE(t *testing.T, name string) (*v1alpha14.RoleBinding, error) {
-	t.Helper()
-	return env.Client.RbacV1alpha1().RoleBindings(env.Namespace).Get(env.Ctx, name, v11.GetOptions{})
 }
 
 // GetRbacV1beta1ClusterRole fetches a RbacV1beta1ClusterRole by name, failing the test on error.
@@ -1559,34 +1382,6 @@ func (env *Env) GetResourceSlice(t *testing.T, name string) *v115.ResourceSlice 
 func (env *Env) GetResourceSliceE(t *testing.T, name string) (*v115.ResourceSlice, error) {
 	t.Helper()
 	return env.Client.ResourceV1().ResourceSlices().Get(env.Ctx, name, v11.GetOptions{})
-}
-
-// GetResourcePoolStatusRequest fetches a ResourcePoolStatusRequest by name, failing the test on error.
-func (env *Env) GetResourcePoolStatusRequest(t *testing.T, name string) *v1alpha3.ResourcePoolStatusRequest {
-	t.Helper()
-	obj, err := env.Client.ResourceV1alpha3().ResourcePoolStatusRequests().Get(env.Ctx, name, v11.GetOptions{})
-	require.NoError(t, err, "failed to get ResourcePoolStatusRequest %s", name)
-	return obj
-}
-
-// GetResourcePoolStatusRequestE fetches a ResourcePoolStatusRequest by name, returning the error for non-existence checks.
-func (env *Env) GetResourcePoolStatusRequestE(t *testing.T, name string) (*v1alpha3.ResourcePoolStatusRequest, error) {
-	t.Helper()
-	return env.Client.ResourceV1alpha3().ResourcePoolStatusRequests().Get(env.Ctx, name, v11.GetOptions{})
-}
-
-// GetResourceV1alpha3DeviceTaintRule fetches a ResourceV1alpha3DeviceTaintRule by name, failing the test on error.
-func (env *Env) GetResourceV1alpha3DeviceTaintRule(t *testing.T, name string) *v1alpha3.DeviceTaintRule {
-	t.Helper()
-	obj, err := env.Client.ResourceV1alpha3().DeviceTaintRules().Get(env.Ctx, name, v11.GetOptions{})
-	require.NoError(t, err, "failed to get ResourceV1alpha3DeviceTaintRule %s", name)
-	return obj
-}
-
-// GetResourceV1alpha3DeviceTaintRuleE fetches a ResourceV1alpha3DeviceTaintRule by name, returning the error for non-existence checks.
-func (env *Env) GetResourceV1alpha3DeviceTaintRuleE(t *testing.T, name string) (*v1alpha3.DeviceTaintRule, error) {
-	t.Helper()
-	return env.Client.ResourceV1alpha3().DeviceTaintRules().Get(env.Ctx, name, v11.GetOptions{})
 }
 
 // GetResourceV1beta1DeviceClass fetches a ResourceV1beta1DeviceClass by name, failing the test on error.
@@ -1729,34 +1524,6 @@ func (env *Env) GetPriorityClassE(t *testing.T, name string) (*v116.PriorityClas
 	return env.Client.SchedulingV1().PriorityClasses().Get(env.Ctx, name, v11.GetOptions{})
 }
 
-// GetPodGroup fetches a PodGroup by name, failing the test on error.
-func (env *Env) GetPodGroup(t *testing.T, name string) *v1alpha21.PodGroup {
-	t.Helper()
-	obj, err := env.Client.SchedulingV1alpha2().PodGroups(env.Namespace).Get(env.Ctx, name, v11.GetOptions{})
-	require.NoError(t, err, "failed to get PodGroup %s", name)
-	return obj
-}
-
-// GetPodGroupE fetches a PodGroup by name, returning the error for non-existence checks.
-func (env *Env) GetPodGroupE(t *testing.T, name string) (*v1alpha21.PodGroup, error) {
-	t.Helper()
-	return env.Client.SchedulingV1alpha2().PodGroups(env.Namespace).Get(env.Ctx, name, v11.GetOptions{})
-}
-
-// GetWorkload fetches a Workload by name, failing the test on error.
-func (env *Env) GetWorkload(t *testing.T, name string) *v1alpha21.Workload {
-	t.Helper()
-	obj, err := env.Client.SchedulingV1alpha2().Workloads(env.Namespace).Get(env.Ctx, name, v11.GetOptions{})
-	require.NoError(t, err, "failed to get Workload %s", name)
-	return obj
-}
-
-// GetWorkloadE fetches a Workload by name, returning the error for non-existence checks.
-func (env *Env) GetWorkloadE(t *testing.T, name string) (*v1alpha21.Workload, error) {
-	t.Helper()
-	return env.Client.SchedulingV1alpha2().Workloads(env.Namespace).Get(env.Ctx, name, v11.GetOptions{})
-}
-
 // GetSchedulingV1beta1PriorityClass fetches a SchedulingV1beta1PriorityClass by name, failing the test on error.
 func (env *Env) GetSchedulingV1beta1PriorityClass(t *testing.T, name string) *v1beta114.PriorityClass {
 	t.Helper()
@@ -1853,48 +1620,6 @@ func (env *Env) GetVolumeAttributesClass(t *testing.T, name string) *v117.Volume
 func (env *Env) GetVolumeAttributesClassE(t *testing.T, name string) (*v117.VolumeAttributesClass, error) {
 	t.Helper()
 	return env.Client.StorageV1().VolumeAttributesClasses().Get(env.Ctx, name, v11.GetOptions{})
-}
-
-// GetStorageV1alpha1CSIStorageCapacity fetches a StorageV1alpha1CSIStorageCapacity by name, failing the test on error.
-func (env *Env) GetStorageV1alpha1CSIStorageCapacity(t *testing.T, name string) *v1alpha15.CSIStorageCapacity {
-	t.Helper()
-	obj, err := env.Client.StorageV1alpha1().CSIStorageCapacities(env.Namespace).Get(env.Ctx, name, v11.GetOptions{})
-	require.NoError(t, err, "failed to get StorageV1alpha1CSIStorageCapacity %s", name)
-	return obj
-}
-
-// GetStorageV1alpha1CSIStorageCapacityE fetches a StorageV1alpha1CSIStorageCapacity by name, returning the error for non-existence checks.
-func (env *Env) GetStorageV1alpha1CSIStorageCapacityE(t *testing.T, name string) (*v1alpha15.CSIStorageCapacity, error) {
-	t.Helper()
-	return env.Client.StorageV1alpha1().CSIStorageCapacities(env.Namespace).Get(env.Ctx, name, v11.GetOptions{})
-}
-
-// GetStorageV1alpha1VolumeAttachment fetches a StorageV1alpha1VolumeAttachment by name, failing the test on error.
-func (env *Env) GetStorageV1alpha1VolumeAttachment(t *testing.T, name string) *v1alpha15.VolumeAttachment {
-	t.Helper()
-	obj, err := env.Client.StorageV1alpha1().VolumeAttachments().Get(env.Ctx, name, v11.GetOptions{})
-	require.NoError(t, err, "failed to get StorageV1alpha1VolumeAttachment %s", name)
-	return obj
-}
-
-// GetStorageV1alpha1VolumeAttachmentE fetches a StorageV1alpha1VolumeAttachment by name, returning the error for non-existence checks.
-func (env *Env) GetStorageV1alpha1VolumeAttachmentE(t *testing.T, name string) (*v1alpha15.VolumeAttachment, error) {
-	t.Helper()
-	return env.Client.StorageV1alpha1().VolumeAttachments().Get(env.Ctx, name, v11.GetOptions{})
-}
-
-// GetStorageV1alpha1VolumeAttributesClass fetches a StorageV1alpha1VolumeAttributesClass by name, failing the test on error.
-func (env *Env) GetStorageV1alpha1VolumeAttributesClass(t *testing.T, name string) *v1alpha15.VolumeAttributesClass {
-	t.Helper()
-	obj, err := env.Client.StorageV1alpha1().VolumeAttributesClasses().Get(env.Ctx, name, v11.GetOptions{})
-	require.NoError(t, err, "failed to get StorageV1alpha1VolumeAttributesClass %s", name)
-	return obj
-}
-
-// GetStorageV1alpha1VolumeAttributesClassE fetches a StorageV1alpha1VolumeAttributesClass by name, returning the error for non-existence checks.
-func (env *Env) GetStorageV1alpha1VolumeAttributesClassE(t *testing.T, name string) (*v1alpha15.VolumeAttributesClass, error) {
-	t.Helper()
-	return env.Client.StorageV1alpha1().VolumeAttributesClasses().Get(env.Ctx, name, v11.GetOptions{})
 }
 
 // GetStorageV1beta1CSIDriver fetches a StorageV1beta1CSIDriver by name, failing the test on error.
