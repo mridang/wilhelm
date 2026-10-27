@@ -1,4 +1,4 @@
-# `internal/gen/upstreamgen`
+# `internal/gen/typesgen`
 
 Extracts a self-contained copy of an upstream Go package, for upstreams that
 cannot be imported as a library.
@@ -12,7 +12,7 @@ reached declarations go into `zz_extracted.go`, and the run fails if two
 packages contribute a type of the same name.
 
 ```bash
-go run github.com/mridang/wilhelm/internal/gen/upstreamgen \
+go run github.com/mridang/wilhelm/internal/gen/typesgen \
   -module github.com/traefik/traefik/v3 -version v3.6.25 \
   -entry pkg/provider/kubernetes/crd/traefikio/v1alpha1 \
   -out crd/v1alpha1

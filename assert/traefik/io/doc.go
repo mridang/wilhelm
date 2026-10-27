@@ -6,5 +6,5 @@
 //
 //	go generate ./...
 //
-//go:generate go run github.com/mridang/wilhelm/internal/gen/upstreamgen -module github.com/traefik/traefik/v3 -version v3.6.25 -entry pkg/provider/kubernetes/crd/traefikio/v1alpha1 -out crd/v1alpha1
+//go:generate go run github.com/mridang/wilhelm/internal/gen/typesgen -module github.com/traefik/traefik/v3 -version v3.6.25 -entry pkg/provider/kubernetes/crd/traefikio/v1alpha1 -out crd/v1alpha1
 package traefikio
