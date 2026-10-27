@@ -3,8 +3,8 @@ module github.com/mridang/wilhelm/env/tekton/pipeline
 go 1.26.2
 
 require (
-	github.com/mridang/wilhelm v1.1.7
-	github.com/mridang/wilhelm/assert/tekton/pipeline v1.1.7
+	github.com/mridang/wilhelm v1.1.8
+	github.com/mridang/wilhelm/assert/tekton/pipeline v1.1.8
 	github.com/stretchr/testify v1.12.1
 	k8s.io/apimachinery v0.36.1
 )

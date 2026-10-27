@@ -6,7 +6,7 @@ require (
 	github.com/fluxcd/pkg/apis/acl v0.9.0
 	github.com/fluxcd/pkg/apis/meta v1.25.1
 	github.com/fluxcd/source-controller/api v1.8.5
-	github.com/mridang/wilhelm v1.1.7
+	github.com/mridang/wilhelm v1.1.8
 	k8s.io/apimachinery v0.36.1
 )
 
