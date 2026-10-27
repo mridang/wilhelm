@@ -45,3 +45,20 @@ jobs:
         uses: mridang/action-semantic-release@v2
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Refresh go.sum of the submodules
+        env:
+          GOWORK: "off"
+          GOPRIVATE: github.com/mridang/wilhelm/*
+        run: |
+          git pull --ff-only
+          for mod in $(find assert env -name go.mod | sort); do
+            (cd "$(dirname "$mod")" && go mod tidy)
+          done
+          if ! git diff --quiet; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add -u -- assert env
+            git commit -m "chore(release): refresh submodule go.sum [skip ci]"
+            git push
+          fi
