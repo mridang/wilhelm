@@ -70,6 +70,7 @@ func (in *Inner) SetDefaults() {}
 
 func (in *Unused) DeepCopy() *Unused { return in }
 `)
+	writeFile(t, src, "LICENSE.md", "MIT License\n")
 	writeFile(t, src, "pkg/other/other.go", `package other
 
 type Extra struct{ Value int }
@@ -151,4 +152,33 @@ import "example.com/up/pkg/other"
 type More struct{ M other.Mode }
 `)
 	require.ErrorContains(t, run(cfg), "type Mode exists in both")
+}
+
+func TestRunCopiesUpstreamLicenseNextToSources(t *testing.T) {
+	cfg := fixture(t)
+	require.NoError(t, run(cfg))
+
+	require.Equal(t, "MIT License\n", read(t, cfg, "LICENSE"))
+}
+
+func TestRunFailsWhenUpstreamHasNoLicense(t *testing.T) {
+	cfg := fixture(t)
+	require.NoError(t, os.Remove(filepath.Join(cfg.srcDir, "LICENSE.md")))
+
+	require.ErrorContains(t, run(cfg), "no license file found")
+}
+
+func TestRunRefusesToClearAModuleRoot(t *testing.T) {
+	cfg := fixture(t)
+	writeFile(t, cfg.out, "go.mod", "module x\n")
+
+	require.ErrorContains(t, run(cfg), "contains a go.mod")
+	require.FileExists(t, filepath.Join(cfg.out, "go.mod"))
+}
+
+func TestRunRefusesToClearTheWorkingDirectory(t *testing.T) {
+	cfg := fixture(t)
+	cfg.out = "."
+
+	require.ErrorContains(t, run(cfg), "dedicated directory")
 }

@@ -152,7 +152,7 @@ type generator struct {
 }
 
 func run(cfg config) error {
-	if err := os.RemoveAll(cfg.out); err != nil {
+	if err := clearOutput(cfg.out); err != nil {
 		return err
 	}
 	g := &generator{cfg: cfg, pkgs: map[string]*pkgSource{}, needed: map[string]map[string]bool{}}
@@ -169,7 +169,10 @@ func run(cfg config) error {
 	if err = g.resolve(); err != nil {
 		return err
 	}
-	return g.emit(entry)
+	if err = g.emit(entry); err != nil {
+		return err
+	}
+	return copyLicense(cfg)
 }
 
 func (g *generator) load(rel string) (*pkgSource, error) {
@@ -639,4 +642,32 @@ func (p *pkgSource) indexGen(file string, d *ast.GenDecl) {
 	if d.Tok == token.CONST || d.Tok == token.VAR {
 		p.values = append(p.values, &valueDecl{file: file, decl: d})
 	}
+}
+
+// clearOutput empties the output directory, refusing anything that looks like
+// a module root so a wrong -out cannot wipe real source.
+func clearOutput(dir string) error {
+	clean := filepath.Clean(dir)
+	if clean == "." || clean == string(filepath.Separator) {
+		return fmt.Errorf("refusing to clear %q: -out must be a dedicated directory", dir)
+	}
+	if _, err := os.Stat(filepath.Join(clean, "go.mod")); err == nil {
+		return fmt.Errorf("refusing to clear %q: it contains a go.mod", dir)
+	}
+	return os.RemoveAll(clean)
+}
+
+// copyLicense places the upstream license next to the copied sources, because
+// the copy is a derivative of that code.
+func copyLicense(cfg config) error {
+	// These are the names under which an upstream module ships its license.
+	for _, name := range []string{"LICENSE", "LICENSE.md", "LICENSE.txt", "COPYING"} {
+		body, err := os.ReadFile(filepath.Join(cfg.srcDir, name))
+		if err != nil {
+			continue
+		}
+		return os.WriteFile( //nolint:gosec // fixed name inside the generator output directory
+			filepath.Join(cfg.out, "LICENSE"), body, filePerm)
+	}
+	return fmt.Errorf("no license file found in %s", cfg.srcDir)
 }
