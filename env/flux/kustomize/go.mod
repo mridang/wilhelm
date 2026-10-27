@@ -4,8 +4,8 @@ go 1.26.2
 
 require (
 	github.com/fluxcd/kustomize-controller/api v1.8.5
-	github.com/mridang/wilhelm v1.1.5
-	github.com/mridang/wilhelm/assert/flux/kustomize v1.1.5
+	github.com/mridang/wilhelm v1.1.6
+	github.com/mridang/wilhelm/assert/flux/kustomize v1.1.6
 	github.com/stretchr/testify v1.12.1
 	k8s.io/apimachinery v0.36.1
 )

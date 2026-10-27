@@ -3,8 +3,8 @@ module github.com/mridang/wilhelm/env/traefik/io
 go 1.26.2
 
 require (
-	github.com/mridang/wilhelm v1.1.5
-	github.com/mridang/wilhelm/assert/traefik/io v1.1.5
+	github.com/mridang/wilhelm v1.1.6
+	github.com/mridang/wilhelm/assert/traefik/io v1.1.6
 	github.com/stretchr/testify v1.12.1
 	k8s.io/apimachinery v0.36.1
 )

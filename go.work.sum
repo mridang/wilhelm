@@ -831,6 +831,7 @@ github.com/mridang/wilhelm/assert/traefik/io v1.0.0/go.mod h1:La4VGOu+K8jaIqAGlF
 github.com/mridang/wilhelm/assert/traefik/io v1.1.1/go.mod h1:LtNYNBCF6GU+nSFJiRAELv53J0v27AX4eVS5fH0HDD8=
 github.com/mridang/wilhelm/assert/traefik/io v1.1.2/go.mod h1:ls5MkvI8I+iUwvikPRy8EcK45DIG/xlbAyrQGlqZSCk=
 github.com/mridang/wilhelm/assert/traefik/io v1.1.4/go.mod h1:65xwYaB2YWv28RTPhYrkQ9mZGUZTmfMNUiryFaaQKlA=
+github.com/mridang/wilhelm/assert/traefik/io v1.1.5/go.mod h1:tt88N+qm9TQXgYwr8GNUZhttY6T3aL/Inlj5eIT1rS8=
 github.com/mridang/wilhelm/assert/velero/api v1.0.0/go.mod h1:GlsW/ckjicZygtvjhvYVb+GUL8reQZ6iq2qPyvCJ7xk=
 github.com/mridang/wilhelm/assert/velero/api v1.1.1/go.mod h1:JwqT1n+LLQCrngu6Fd2i3NqdvBefGtBUsZllscxAyn0=
 github.com/mridang/wilhelm/assert/velero/api v1.1.2/go.mod h1:Bu+1m7nBlKfPNrxXUsRIHPq1XhG8xlLvCdikMS0GN2I=
