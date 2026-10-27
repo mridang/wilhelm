@@ -69,10 +69,10 @@ github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd/go.mod h1:6dJ
 github.com/modern-go/reflect2 v1.0.2/go.mod h1:yWuevngMOJpCy52FWWMvUC8ws7m/LJsjYzDa0/r8luk=
 github.com/modern-go/reflect2 v1.0.3-0.20250322232337-35a7c28c31ee h1:W5t00kpgFdJifH4BDsTlE89Zl93FEloxaWZfGcifgq8=
 github.com/modern-go/reflect2 v1.0.3-0.20250322232337-35a7c28c31ee/go.mod h1:yWuevngMOJpCy52FWWMvUC8ws7m/LJsjYzDa0/r8luk=
-github.com/mridang/wilhelm v1.1.7 h1:iT7BcBTM49NlwQ3P6O08HqytkmVNWjUI+omOsGhF5j0=
-github.com/mridang/wilhelm v1.1.7/go.mod h1:ADJbzK0aE60qfBO/Y7YAqHIGLgxZoE5CfEPc7ekk/EI=
-github.com/mridang/wilhelm/assert/flux/helm v1.1.7 h1:h7YDreiGUZPTJluj4uQkba+vW7vtQuLukY1C4B18yEY=
-github.com/mridang/wilhelm/assert/flux/helm v1.1.7/go.mod h1:JKdf+AHUzz3ma9OPisY+BSkqCevA6OvNFe55Ptc5wjg=
+github.com/mridang/wilhelm v1.1.8 h1:MBNdSjxIbC298UX5OYk3QMVX2FH1GxZZLiohmRjfgjo=
+github.com/mridang/wilhelm v1.1.8/go.mod h1:ADJbzK0aE60qfBO/Y7YAqHIGLgxZoE5CfEPc7ekk/EI=
+github.com/mridang/wilhelm/assert/flux/helm v1.1.8 h1:unJ9M2BEcUVSoTQLkA5FMwFmWYKvYmlIMUcYcNRGC3I=
+github.com/mridang/wilhelm/assert/flux/helm v1.1.8/go.mod h1:O4xdqU5pWXzsPSDOEhv9x9vzEsDq6mkhGYaUEpdBFmA=
 github.com/munnerz/goautoneg v0.0.0-20191010083416-a7dc8b61c822 h1:C3w9PqII01/Oq1c1nUAm88MOHcQC9l5mIlSMApZMrHA=
 github.com/munnerz/goautoneg v0.0.0-20191010083416-a7dc8b61c822/go.mod h1:+n7T8mK8HuQTcFwEeznm/DIxMOiR9yIdICNftLE1DvQ=
 github.com/onsi/ginkgo/v2 v2.28.3 h1:4JvMdwtFU0imd8fHx25OJXoDMRexnf8v5NHKYSTTji4=
