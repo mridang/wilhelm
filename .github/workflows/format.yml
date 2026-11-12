@@ -3,7 +3,7 @@ name: Format Code
 on: push
 
 permissions:
-  contents: write
+  contents: read
 
 defaults:
   run:
@@ -28,25 +28,24 @@ jobs:
       - name: Install dprint
         run: curl -fsSL https://dprint.dev/install.sh | sh
 
-      - name: Run dprint
-        run: ~/.dprint/bin/dprint fmt
+      - name: Check dprint
+        run: ~/.dprint/bin/dprint check
 
-      - name: Run gofmt
-        run: gofmt -s -w .
+      - name: Check gofmt
+        run: |
+          unformatted=$(gofmt -s -l .)
+          if [ -n "$unformatted" ]; then
+            echo "$unformatted"
+            exit 1
+          fi
 
-      - name: Run gofmt across every submodule
+      - name: Check gofmt across every submodule
         run: |
           set -euo pipefail
           for mod in $(find assert env -name go.mod); do
-            (cd "$(dirname "$mod")" && gofmt -s -w .)
+            unformatted=$(cd "$(dirname "$mod")" && gofmt -s -l .)
+            if [ -n "$unformatted" ]; then
+              echo "$unformatted"
+              exit 1
+            fi
           done
-
-      - name: Commit and Push Changes
-        uses: stefanzweifel/git-auto-commit-action@v5
-        with:
-          commit_message: Apply formatting
-          commit_options: "--no-verify"
-          repository: .
-          commit_user_name: github-actions[bot]
-          commit_user_email: github-actions[bot]@users.noreply.github.com
-          commit_author: GitHub Actions <actions@github.com>
