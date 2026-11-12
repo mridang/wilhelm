@@ -3,7 +3,7 @@ module github.com/mridang/wilhelm/assert/cert/manager
 go 1.26.2
 
 require (
-	github.com/cert-manager/cert-manager v1.20.2
+	github.com/cert-manager/cert-manager v1.20.3
 	github.com/mridang/wilhelm v1.1.8
 	k8s.io/apimachinery v0.36.1
 )
