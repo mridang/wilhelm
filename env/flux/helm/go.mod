@@ -1,6 +1,6 @@
 module github.com/mridang/wilhelm/env/flux/helm
 
-go 1.26.2
+go 1.27.1
 
 require (
 	github.com/fluxcd/helm-controller/api v1.5.5

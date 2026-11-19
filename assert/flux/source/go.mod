@@ -1,6 +1,6 @@
 module github.com/mridang/wilhelm/assert/flux/source
 
-go 1.26.2
+go 1.27.1
 
 require (
 	github.com/fluxcd/pkg/apis/acl v0.9.0

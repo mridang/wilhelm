@@ -136,7 +136,7 @@ bash hack/scaffold-crd.sh <family> <ver> <upstream> <api-group>
 bash hack/verify-all.sh                     # build + lint every wilhelm module
 ```
 
-`devbox.json` pins Go 1.26, `golangci-lint`, `dprint`, `gotestsum`, `helm`,
+`devbox.json` pins Go 1.27, `golangci-lint`, `dprint`, `gotestsum`, `helm`,
 and `kubectl`. CI mirrors the same toolchain.
 
 `dprint.json` deliberately formats only Markdown, JSON, YAML and TOML —
