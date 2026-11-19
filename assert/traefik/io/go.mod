@@ -1,6 +1,6 @@
 module github.com/mridang/wilhelm/assert/traefik/io
 
-go 1.27.1
+go 1.26.2
 
 require (
 	github.com/mridang/wilhelm v1.1.8

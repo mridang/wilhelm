@@ -175,11 +175,11 @@ func isTopLevelKind(struc *types.Struct) bool {
 
 // lastSegment returns the last "/"-separated segment of p.
 func lastSegment(p string) string {
-	_, last, found := strings.CutLast(p, "/")
-	if !found {
+	idx := strings.LastIndex(p, "/")
+	if idx < 0 {
 		return p
 	}
-	return last
+	return p[idx+1:]
 }
 
 // emitCRDFile renders the generated env subpackage source for the

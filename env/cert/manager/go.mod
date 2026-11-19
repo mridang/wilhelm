@@ -1,6 +1,6 @@
 module github.com/mridang/wilhelm/env/cert/manager
 
-go 1.27.1
+go 1.26.2
 
 require (
 	github.com/cert-manager/cert-manager v1.20.3

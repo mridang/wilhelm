@@ -130,7 +130,7 @@ func tryMatcher(
 	if !matcherField.IsValid() || matcherField.IsNil() {
 		return false
 	}
-	matcher, ok := reflect.TypeAssert[types.GomegaMatcher](matcherField)
+	matcher, ok := matcherField.Interface().(types.GomegaMatcher)
 	if !ok {
 		panic(fmt.Sprintf(
 			"AssertPartial: field %q Matcher does not implement GomegaMatcher",

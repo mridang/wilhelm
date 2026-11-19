@@ -1,6 +1,6 @@
 module github.com/mridang/wilhelm/env/flux/source
 
-go 1.27.1
+go 1.26.2
 
 require (
 	github.com/fluxcd/source-controller/api v1.8.5
