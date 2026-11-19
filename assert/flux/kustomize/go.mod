@@ -1,6 +1,6 @@
 module github.com/mridang/wilhelm/assert/flux/kustomize
 
-go 1.26.2
+go 1.27.1
 
 require (
 	github.com/fluxcd/kustomize-controller/api v1.8.5
