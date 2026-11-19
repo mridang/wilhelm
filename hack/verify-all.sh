@@ -6,6 +6,7 @@ ROOT=$(cd "$(dirname "$0")/.." && pwd)
 cd "$ROOT"
 
 fail=0
+golangci_lint=$(go tool -n golangci-lint)
 modules=$(find . -name go.mod -not -path './.go/*' 2>/dev/null \
   | xargs -n1 dirname | sort -u)
 
@@ -16,7 +17,7 @@ for d in $modules; do
     fail=1
     continue
   fi
-  if ! (set -o pipefail; cd "$d" && golangci-lint run ./... 2>&1 | grep -v '^level=' | tail -5); then
+  if ! (set -o pipefail; cd "$d" && "$golangci_lint" run ./... 2>&1 | grep -v '^level=' | tail -5); then
     fail=1
   fi
 done
