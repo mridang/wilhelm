@@ -136,12 +136,13 @@ bash hack/scaffold-crd.sh <family> <ver> <upstream> <api-group>
 bash hack/verify-all.sh                     # build + lint every wilhelm module
 ```
 
-`devbox.json` pins Go 1.26, `golangci-lint`, `dprint`, `gotestsum`, `helm`,
-and `kubectl`. CI mirrors the same toolchain.
+`devbox.json` pins Go 1.26, `dprint`, `helm`, and `kubectl`. `golangci-lint`
+and `gotestsum` are pinned in `go.mod` and run through `go tool`. CI mirrors
+the same toolchain.
 
 `dprint.json` deliberately formats only Markdown, JSON, YAML and TOML —
 Go formatting is handled by the standard `gofmt`/`goimports` chain
-(invoked via `make format` and `golangci-lint --fix`). Keeping the two
+(invoked via `make format` and `go tool golangci-lint --fix`). Keeping the two
 tools disjoint avoids fight-loops on `zz_generated.go`.
 
 ## License

@@ -28,9 +28,6 @@ jobs:
         with:
           go-version-file: "go.mod"
 
-      - name: Install gotestsum
-        run: go install gotest.tools/gotestsum@latest
-
       - name: Test root module
         run: make test
 
