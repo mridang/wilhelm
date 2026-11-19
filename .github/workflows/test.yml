@@ -28,7 +28,7 @@ jobs:
         with:
           go-version-file: "go.mod"
 
-      - name: Test root module
+      - name: Test
         run: make test
 
       - name: Test every submodule

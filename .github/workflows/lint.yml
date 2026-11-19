@@ -28,7 +28,7 @@ jobs:
         with:
           go-version-file: "go.mod"
 
-      - name: Lint root module
+      - name: Lint
         run: make lint
 
       - name: Lint every submodule

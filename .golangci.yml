@@ -227,9 +227,7 @@ linters:
       forbid-mutex: true
 
     gomoddirectives:
-      # Wilhelm is a multi-module monorepo: CRD subpackages locally
-      # replace the parent module so the workspace builds without
-      # depending on a published tag.
+      # Local replace directives are allowed only for the project's own modules.
       replace-allow-list:
         - github.com/mridang/wilhelm
       replace-local: true
@@ -245,7 +243,7 @@ linters:
       # Default: [ switch ]
       check:
         - switch
-        - map
+        - mapliteral
 
     exhaustruct:
       # List of regular expressions to match type names that should be excluded from processing.

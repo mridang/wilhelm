@@ -26,7 +26,7 @@ format:
 
 format-check:
 	dprint check
-	test -z "$$(gofmt -l .)"
+	test -z "$$(gofmt -s -l .)"
 
 generate:
 	go generate ./...
