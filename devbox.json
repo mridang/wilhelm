@@ -17,9 +17,9 @@
     "scripts": {
       "test": "make test",
       "build": "go build ./...",
-      "lint": "golangci-lint run --fix",
-      "format": "dprint fmt && go fmt ./...",
-      "generate": "go generate ./..."
+      "lint": "make lint",
+      "format": "make format",
+      "generate": "make generate"
     }
   }
 }
