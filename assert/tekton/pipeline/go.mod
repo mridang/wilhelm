@@ -3,7 +3,7 @@ module github.com/mridang/wilhelm/assert/tekton/pipeline
 go 1.27.1
 
 require (
-	github.com/mridang/wilhelm v1.1.8
+	github.com/mridang/wilhelm v1.1.9
 	k8s.io/api v0.36.1
 	k8s.io/apimachinery v0.36.1
 	knative.dev/pkg v0.0.0-20260531000007-52dbd5ece63f

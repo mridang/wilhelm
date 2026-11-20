@@ -4,8 +4,8 @@ go 1.27.1
 
 require (
 	github.com/fluxcd/helm-controller/api v1.5.5
-	github.com/mridang/wilhelm v1.1.8
-	github.com/mridang/wilhelm/assert/flux/helm v1.1.8
+	github.com/mridang/wilhelm v1.1.9
+	github.com/mridang/wilhelm/assert/flux/helm v1.1.9
 	github.com/stretchr/testify v1.12.1
 	k8s.io/apimachinery v0.36.1
 )

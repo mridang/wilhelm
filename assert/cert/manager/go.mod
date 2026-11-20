@@ -4,7 +4,7 @@ go 1.27.1
 
 require (
 	github.com/cert-manager/cert-manager v1.20.3
-	github.com/mridang/wilhelm v1.1.8
+	github.com/mridang/wilhelm v1.1.9
 	k8s.io/apimachinery v0.36.1
 )
 

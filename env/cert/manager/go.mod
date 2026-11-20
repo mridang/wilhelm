@@ -4,8 +4,8 @@ go 1.27.1
 
 require (
 	github.com/cert-manager/cert-manager v1.20.3
-	github.com/mridang/wilhelm v1.1.8
-	github.com/mridang/wilhelm/assert/cert/manager v1.1.8
+	github.com/mridang/wilhelm v1.1.9
+	github.com/mridang/wilhelm/assert/cert/manager v1.1.9
 	github.com/stretchr/testify v1.12.1
 	k8s.io/apimachinery v0.36.1
 )
