@@ -13,7 +13,7 @@ Thank you for your interest in contributing!
 
 ```bash
 # Install devbox (https://www.jetify.com/devbox/)
-devbox shell          # activates Go 1.26, golangci-lint, dprint, etc.
+devbox shell          # activates Go 1.27, dprint, etc.
 make build            # build root module
 make test             # run unit tests
 make lint             # golangci-lint

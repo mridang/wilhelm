@@ -26,18 +26,12 @@ jobs:
           go-version-file: "go.mod"
 
       - name: Install dprint
-        run: curl -fsSL https://dprint.dev/install.sh | sh
-
-      - name: Check dprint
-        run: ~/.dprint/bin/dprint check
-
-      - name: Check gofmt
         run: |
-          unformatted=$(gofmt -s -l .)
-          if [ -n "$unformatted" ]; then
-            echo "$unformatted"
-            exit 1
-          fi
+          curl -fsSL https://dprint.dev/install.sh | sh
+          echo "$HOME/.dprint/bin" >> "$GITHUB_PATH"
+
+      - name: Check formatting
+        run: make format-check
 
       - name: Check gofmt across every submodule
         run: |

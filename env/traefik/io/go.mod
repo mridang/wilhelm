@@ -1,6 +1,6 @@
 module github.com/mridang/wilhelm/env/traefik/io
 
-go 1.26.2
+go 1.27.1
 
 require (
 	github.com/mridang/wilhelm v1.1.8
