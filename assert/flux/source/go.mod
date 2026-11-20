@@ -17,14 +17,14 @@ require (
 	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
 	github.com/modern-go/reflect2 v1.0.3-0.20250322232337-35a7c28c31ee // indirect
 	github.com/onsi/ginkgo/v2 v2.28.3 // indirect
-	github.com/onsi/gomega v1.41.0 // indirect
+	github.com/onsi/gomega v1.42.1 // indirect
 	github.com/prometheus-operator/prometheus-operator/pkg/apis/monitoring v0.91.0 // indirect
 	github.com/stretchr/testify v1.12.1 // indirect
 	github.com/x448/float16 v0.8.4 // indirect
 	go.yaml.in/yaml/v2 v2.4.4 // indirect
 	go.yaml.in/yaml/v3 v3.0.5 // indirect
-	golang.org/x/net v0.59.0 // indirect
-	golang.org/x/text v0.42.0 // indirect
+	golang.org/x/net v0.61.0 // indirect
+	golang.org/x/text v0.43.0 // indirect
 	gopkg.in/inf.v0 v0.9.1 // indirect
 	k8s.io/api v0.36.1 // indirect
 	k8s.io/klog/v2 v2.140.0 // indirect
